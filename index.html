@@ -36,25 +36,22 @@
 					default:
 						return file;
 				}
+			},
+			onRuntimeInitialized: function() {
+				const {_init, _start, _gameloop, _destroy} = Module;
+				const width = window.innerWidth;
+				const height = window.innerHeight;
+				_init(width, height);
+
+
+				/*(function draw() {
+					_gameloop();
+					requestAnimationFrame(draw);
+				})();*/
+				_start();
 			}
 		}
 	</script>
 	<script type="text/javascript" src="bin/onodrim.js"></script>
-	<script>
-		Module.onRuntimeInitialized = function onRuntimeInitialized() {
-			const {_init, _start, _gameloop, _destroy} = Module;
-			const width = window.innerWidth;
-			const height = window.innerHeight;
-			_init(width, height);
-
-
-			/*(function draw() {
-				_gameloop();
-				requestAnimationFrame(draw);
-			})();*/
-			_start();
-		}
-		
-	</script>
 </body>
 </html>
