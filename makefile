@@ -1,6 +1,6 @@
 # SETUP
 CC=em++
-OPTIONS=-s WASM=1 -std=c++1z
+OPTIONS=-s WASM=1 -std=c++1z -s FULL_ES3=1 -s USE_WEBGL2=1 -s USE_GLFW=3
 
 # DIRECTORIES
 DIR_ROOT=./Onodrim/Onodrim
