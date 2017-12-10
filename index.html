@@ -1,0 +1,46 @@
+<html>
+<head>
+	<style type="text/css">
+		canvas.emscripten { 
+			border: 0px none; 
+			background-color: black; 
+		}
+	</style>
+</head>
+<body>
+	<div>
+		<canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+	</div>
+	<script>
+		var Module = {
+			canvas: (function() {
+				var canvas = document.getElementById('canvas');
+
+				// As a default initial behavior, pop up an alert when webgl context is lost. To make your
+				// application robust, you may want to override this behavior before shipping!
+				// See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
+				canvas.addEventListener("webglcontextlost", function(e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
+
+				return canvas;
+			}),
+			locateFile: function(file) {
+				switch(file) {
+					case 'onodrim.wasm':
+						return `bin/${file}`;
+					default:
+						return file;
+				}
+			}
+		}
+	</script>
+	<script type="text/javascript" src="bin/onodrim.js"></script>
+	<script>
+		Module.onRuntimeInitialized = function onRuntimeInitialized() {
+			const {_init, _start, _gameloop, _destroy} = Module;
+			_init();
+			// _start();
+		}
+		
+	</script>
+</body>
+</html>
