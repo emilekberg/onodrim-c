@@ -1,9 +1,9 @@
 #pragma once
 #include <chrono>
 namespace onodrim::time {
-	auto __lastUpdateTime = std::chrono::high_resolution_clock::now();
-	auto __started = std::chrono::high_resolution_clock::now();
-	float __deltaTime = 1;
+	static auto __lastUpdateTime = std::chrono::high_resolution_clock::now();
+	static auto __started = std::chrono::high_resolution_clock::now();
+	static float __deltaTime = 1;
 
 	inline void update()
 	{

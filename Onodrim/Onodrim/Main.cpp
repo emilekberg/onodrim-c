@@ -1,7 +1,6 @@
 #include "./src/Core.h"
-#ifdef __EMSCRIPTEN__
-	#include <emscripten.h>
-#endif
+#include <stdio.h>
+#include <stdlib.h>
 /*#include "./src/Entity.h"
 #include "./src/components/Transform2d.h"
 
@@ -27,9 +26,8 @@
 onodrim::Core* core;
 #ifdef __EMSCRIPTEN__
 extern "C"
-{
 	EMSCRIPTEN_KEEPALIVE 
-	void init()
+	void init(int width, int height)
 	{
 		core = new onodrim::Core();
 	}
