@@ -1,4 +1,7 @@
 #include "./src/Core.h"
+#ifdef __EMSCRIPTEN__
+	#include <emscripten.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 /*#include "./src/Entity.h"
@@ -26,6 +29,7 @@
 onodrim::Core* core;
 #ifdef __EMSCRIPTEN__
 extern "C"
+{
 	EMSCRIPTEN_KEEPALIVE 
 	void init(int width, int height)
 	{
