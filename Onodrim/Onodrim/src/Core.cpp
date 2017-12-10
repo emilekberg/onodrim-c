@@ -8,7 +8,9 @@
 #include "./system/FixedUpdateSystem.h"
 #include "./system/UpdateSystem.h"
 #include "./system/OpenGLSystem.h"
-
+#ifdef __EMSCRIPTEN__
+	#include <emscripten.h>
+#endif
 namespace onodrim {
 	Core::Core()
 	{
@@ -26,10 +28,16 @@ namespace onodrim {
 	void Core::Start() { 
 		utils::logLine("Core started.");
 
-		while (true)
-		{
-			GameLoop();
-		}
+		#ifdef __EMSCRIPTEN__
+			// need to figure out how to do this...
+			// emscripten_set_main_loop(this->*Some_fnc_ptr, 0, 1);
+		#else
+			while (true)
+			{
+				GameLoop();
+			}
+		#endif
+		
 		
 	}
 

@@ -37,16 +37,22 @@ extern "C"
 	}
 
 	EMSCRIPTEN_KEEPALIVE 
-	void start()
-	{
-		core->Start();
-	}
-
-	EMSCRIPTEN_KEEPALIVE 
 	void gameloop()
 	{
 		core->GameLoop();
 	}
+
+	EMSCRIPTEN_KEEPALIVE 
+	void start()
+	{
+		core->Start();
+		// check an see if this can be moved into gameloop
+		#ifdef __EMSCRIPTEN__
+			emscripten_set_main_loop(gameloop, 0, 0);
+		#endif
+	}
+
+	
 
 	EMSCRIPTEN_KEEPALIVE 
 	void destroy()
