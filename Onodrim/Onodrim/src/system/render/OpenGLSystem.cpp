@@ -152,7 +152,7 @@ namespace onodrim::system::render
 		
 	}
 
-	void OpenGLSystem::Render()
+	bool OpenGLSystem::Render()
 	{
 		// utils::logLine("OpenGLSystem::Render()");
 		float renderDelta = 0.f;
@@ -190,5 +190,15 @@ namespace onodrim::system::render
 
 		glfwSwapBuffers(m_pWindow);
 		glfwPollEvents();
+
+#ifndef __EMSCRIPTEN__
+		if (glfwWindowShouldClose(m_pWindow))
+		{
+			glfwDestroyWindow(m_pWindow);
+			glfwTerminate();
+			return false;
+		}
+#endif
+		return true;
 	}
 }

@@ -14,13 +14,14 @@ namespace onodrim::system::update {
 			return dynamic_cast<UpdateComponent*>(component) != nullptr;
 		}
 
-		inline virtual void Tick()
+		inline virtual bool Tick()
 		{
 			time::update();
 			for (auto it = m_Components.begin(); it != m_Components.end(); it++)
 			{
 				(*it)->Update();
 			}
+			return true;
 		}
 
 	private:

@@ -27,7 +27,7 @@ namespace onodrim::system::update {
 			m_Components.push_back(casted);
 		}
 
-		inline virtual void Tick()
+		inline virtual bool Tick()
 		{
 			
 			time::setFixedUpdateTimeStep(m_UpdateRate);
@@ -47,7 +47,7 @@ namespace onodrim::system::update {
 				m_NextUpdateTime += m_UpdateRate;
 				now = time::now();
 			}
-			
+			return true;
 		}
 
 	private:

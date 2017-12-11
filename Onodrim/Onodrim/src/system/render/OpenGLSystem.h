@@ -29,12 +29,12 @@ namespace onodrim::system::render {
 			return dynamic_cast<RenderComponent*>(component) != nullptr;
 		}
 
-		inline virtual void Tick()
+		inline virtual bool Tick()
 		{
-			Render();
+			return Render();
 		}
 
-		void Render();
+		bool Render();
 
 		void InitGL();
 		void InitShaders();

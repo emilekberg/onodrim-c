@@ -64,10 +64,14 @@ namespace onodrim::system {
 			return list;
 		}
 
-		inline void Tick() {
+		inline bool Tick() {
 			for (auto it = m_TickSystems.begin(); it != m_TickSystems.end(); it++) {
-				(*it)->Tick();
+				if (!(*it)->Tick())
+				{
+					return false;
+				}
 			}
+			return true;
 		}
 
 	private:

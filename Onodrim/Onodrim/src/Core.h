@@ -7,9 +7,6 @@ namespace onodrim {
 		~Core();
 
 		void Start();
-		void GameLoop();
-	private:
-		void Update();
-		void Render();
+		bool GameLoop();
 	};
 }

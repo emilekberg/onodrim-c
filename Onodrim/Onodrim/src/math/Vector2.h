@@ -19,7 +19,7 @@ namespace onodrim {
 
 		inline float Length()
 		{
-			return sqrt((X * X) + (Y * Y));
+			return static_cast<float>(sqrt((X * X) + (Y * Y)));
 		}
 		inline float LengthSquared()
 		{
