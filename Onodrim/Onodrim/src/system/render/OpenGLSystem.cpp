@@ -1,7 +1,7 @@
 #include <algorithm>
 #include "./OpenGLSystem.h"
 #include "../../utils/Logger.h"
-
+#include <stdio.h>
 namespace onodrim::system::render
 {
 	OpenGLSystem::OpenGLSystem()
@@ -24,7 +24,7 @@ namespace onodrim::system::render
 		#endif
 		glfwSetErrorCallback([](int error, const char * msg)
 		{
-			onodrim::utils::logLine(msg);
+			onodrim::utils::log(msg);
 		});
 		if(!glfwInit())
 		{
@@ -48,6 +48,18 @@ namespace onodrim::system::render
 		}	
 		glfwMakeContextCurrent(m_pWindow);
 		
+		#ifndef __EMSCRIPTEN__
+		if (glBlendEquation == NULL)
+		{
+			utils::log("OpenGLSystem::InitGL - fetching address for glBlendEquation.");
+			glBlendEquation = (PFNGLBLENDEQUATIONPROC)wglGetProcAddress("glBlendEquation");
+		}
+		#endif
+		
+		utils::log("OpenGLSystem::InitGL - vendor string: %s\n", glGetString(GL_VENDOR));
+		utils::log("OpenGLSystem::InitGL - renderer string: %s\n", glGetString(GL_RENDERER));
+		utils::log("OpenGLSystem::InitGL - version string: %s\n", glGetString(GL_VERSION));
+
 		glClearColor(0.39f, 0.58f, 0.92f, 1.0f);
 		CheckError();
 		glEnable(GL_DEPTH_TEST);
@@ -56,7 +68,7 @@ namespace onodrim::system::render
 		CheckError();
 		glEnable(GL_BLEND);
 		CheckError();
-		// glBlendEquation(GL_FUNC_ADD);
+		glBlendEquation(GL_FUNC_ADD);
 		CheckError();
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		CheckError();
@@ -68,16 +80,14 @@ namespace onodrim::system::render
 		GLenum err = glGetError();
 		if (err != GL_NO_ERROR)
 		{ 
-			utils::logLine("error");
+			utils::log("error");
 		}
 		// const GLubyte* gluErrorString(GLenum errorCode);
 
-		GLenum errCode;
-		const GLubyte *errString;
 		if (err != GL_NO_ERROR)
 		{
 			// errString = gluErrorString(err);
-			utils::logLine("error");
+			utils::log("error");
 		}
 
 
@@ -102,7 +112,7 @@ namespace onodrim::system::render
 		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 		if(!success)
 		{
-			utils::logLine("Error when compiling shader");
+			utils::log("Error when compiling shader");
 
 			GLint maxLength = 0;
 			glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
@@ -124,7 +134,7 @@ namespace onodrim::system::render
 		GLuint program = glCreateProgram();
 		if(!program)
 		{
-			utils::logLine("error when creating program");
+			utils::log("error when creating program");
 			return;
 		}
 		glAttachShader(program, vertShader);
@@ -134,7 +144,7 @@ namespace onodrim::system::render
 		glGetProgramiv(program, GL_LINK_STATUS, &success);
 		if(!success)
 		{
-			utils::logLine("error when linking program");
+			utils::log("error when linking program");
 		}
 		glUseProgram(program);
 

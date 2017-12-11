@@ -14,7 +14,7 @@
 namespace onodrim {
 	Core::Core()
 	{
-		utils::logLine("Core created.");
+		utils::log("Core created.");
 		system::SystemManager::GetInstance()->AddSystem(new system::update::FixedUpdateSystem());
 		system::SystemManager::GetInstance()->AddSystem(new system::update::UpdateSystem());
 		system::SystemManager::GetInstance()->AddSystem(new system::render::OpenGLSystem());
@@ -26,7 +26,7 @@ namespace onodrim {
 	}
 
 	void Core::Start() { 
-		utils::logLine("Core started.");
+		utils::log("Core started.");
 
 		#ifdef __EMSCRIPTEN__
 			// need to figure out how to do this...

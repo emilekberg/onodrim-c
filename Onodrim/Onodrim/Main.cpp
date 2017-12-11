@@ -1,3 +1,8 @@
+#ifdef _WIN32
+#include <windows.h>
+#else
+#define APIENTRY
+#endif
 #include "./src/Core.h"
 /*
 #ifndef EMSCRIPTEN_KEEPALIVE
@@ -66,7 +71,7 @@ extern "C"
 
 	void EMSCRIPTEN_KEEPALIVE destroy()
 	{
-		onodrim::utils::logLine("Core Destroyed");
+		onodrim::utils::log("Core Destroyed");
 		delete core;
 	}
 }

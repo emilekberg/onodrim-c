@@ -34,6 +34,6 @@ namespace onodrim::time {
 
 	inline int fps()
 	{
-		return 1.0f / __deltaTime;
+		return static_cast<int>(1.0f / __deltaTime);
 	}
 }
