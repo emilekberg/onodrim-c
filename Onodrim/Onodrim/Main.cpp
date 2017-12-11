@@ -1,10 +1,18 @@
 #include "./src/Core.h"
+/*
+#ifndef EMSCRIPTEN_KEEPALIVE
+#define EMSCRIPTEN_KEEPALIVE
+#endif
+*/
 #ifdef __EMSCRIPTEN__
 	#include <emscripten.h>
 #endif
+
 #include <stdio.h>
 #include <stdlib.h>
-/*#include "./src/Entity.h"
+#include "./src/Entity.h"
+#include "./src/components/Sprite.h"
+/*
 #include "./src/components/Transform2d.h"
 
 
@@ -26,24 +34,28 @@
 // using namespace onodrim;
 // onodrim::random::Seed(time(NULL));
 
-onodrim::Core* core;
+
+
 #ifdef __EMSCRIPTEN__
+onodrim::Core* core;
+onodrim::Entity* entity;
+onodrim::Sprite* sprite;
 extern "C"
 {
-	EMSCRIPTEN_KEEPALIVE 
-	void init(int width, int height)
+	void EMSCRIPTEN_KEEPALIVE init(int width, int height)
 	{
 		core = new onodrim::Core();
+		entity = new onodrim::Entity();
+		sprite = new onodrim::Sprite();
+		entity->AddComponent(sprite);
 	}
 
-	EMSCRIPTEN_KEEPALIVE 
-	void gameloop()
+	void EMSCRIPTEN_KEEPALIVE gameloop()
 	{
 		core->GameLoop();
 	}
 
-	EMSCRIPTEN_KEEPALIVE 
-	void start()
+	void EMSCRIPTEN_KEEPALIVE start()
 	{
 		core->Start();
 		// check an see if this can be moved into gameloop
@@ -52,15 +64,21 @@ extern "C"
 		#endif
 	}
 
-	
-
-	EMSCRIPTEN_KEEPALIVE 
-	void destroy()
+	void EMSCRIPTEN_KEEPALIVE destroy()
 	{
 		onodrim::utils::logLine("Core Destroyed");
 		delete core;
 	}
 }
+#else
+int main()
+{
+	auto* core = new onodrim::Core();
+	core->Start();
+	return 0;
+}
+
+
 #endif
 
 /*

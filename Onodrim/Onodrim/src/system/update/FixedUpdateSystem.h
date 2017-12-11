@@ -1,8 +1,8 @@
 #pragma once
-#include "./TickSystem.h"
-#include "../utils/Time.h"
-#include "../components/FixedUpdateComponent.h"
-namespace onodrim::system {
+#include "../TickSystem.h"
+#include "../../utils/Time.h"
+#include "../../components/FixedUpdateComponent.h"
+namespace onodrim::system::update {
 	class FixedUpdateSystem : public TickSystem
 	{
 	public:

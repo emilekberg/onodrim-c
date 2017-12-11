@@ -5,9 +5,9 @@
 #include "./utils/Time.h"
 #include "./utils/Logger.h"
 #include "./system/SystemManager.h"
-#include "./system/FixedUpdateSystem.h"
-#include "./system/UpdateSystem.h"
-#include "./system/OpenGLSystem.h"
+#include "./system/update/FixedUpdateSystem.h"
+#include "./system/update/UpdateSystem.h"
+#include "./system/render/OpenGLSystem.h"
 #ifdef __EMSCRIPTEN__
 	#include <emscripten.h>
 #endif
@@ -15,9 +15,9 @@ namespace onodrim {
 	Core::Core()
 	{
 		utils::logLine("Core created.");
-		system::SystemManager::GetInstance()->AddSystem(new system::FixedUpdateSystem());
-		system::SystemManager::GetInstance()->AddSystem(new system::UpdateSystem());
-		system::SystemManager::GetInstance()->AddSystem(new system::OpenGLSystem());
+		system::SystemManager::GetInstance()->AddSystem(new system::update::FixedUpdateSystem());
+		system::SystemManager::GetInstance()->AddSystem(new system::update::UpdateSystem());
+		system::SystemManager::GetInstance()->AddSystem(new system::render::OpenGLSystem());
 	}
 
 

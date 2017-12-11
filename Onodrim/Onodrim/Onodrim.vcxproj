@@ -21,28 +21,37 @@
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="src\components\Component.cpp" />
+    <ClCompile Include="src\components\RenderComponent.cpp" />
+    <ClCompile Include="src\components\Sprite.cpp" />
     <ClCompile Include="src\components\Transform.cpp" />
     <ClCompile Include="src\components\Transform2d.cpp" />
     <ClCompile Include="src\Core.cpp" />
     <ClCompile Include="src\Entity.cpp" />
+    <ClCompile Include="src\system\render\OpenGLSystem.cpp" />
     <ClCompile Include="src\system\SystemManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\components\Component.h" />
     <ClInclude Include="src\components\FixedUpdateComponent.h" />
+    <ClInclude Include="src\components\RenderComponent.h" />
+    <ClInclude Include="src\components\Sprite.h" />
     <ClInclude Include="src\components\Transform.h" />
     <ClInclude Include="src\components\Transform2d.h" />
     <ClInclude Include="src\components\UpdateComponent.h" />
     <ClInclude Include="src\Core.h" />
+    <ClInclude Include="src\data\RenderState.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\math\Matrix3.h" />
     <ClInclude Include="src\math\Random.h" />
     <ClInclude Include="src\math\Vector2.h" />
     <ClInclude Include="src\system\BaseSystem.h" />
     <ClInclude Include="src\system\FixedUpdateSystem.h" />
+    <ClInclude Include="src\system\render\OpenGLSystem.h" />
     <ClInclude Include="src\system\SystemManager.h" />
     <ClInclude Include="src\system\TickSystem.h" />
     <ClInclude Include="src\system\UpdateSystem.h" />
+    <ClInclude Include="src\system\update\FixedUpdateSystem.h" />
+    <ClInclude Include="src\system\update\UpdateSystem.h" />
     <ClInclude Include="src\utils\Logger.h" />
     <ClInclude Include="src\utils\Time.h" />
   </ItemGroup>
@@ -97,7 +106,14 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>E:\dev\onodrim-c\3rdparty_vs\include;E:\dev\onodrim-c\3rdparty_vs\freeglut\include;E:\dev\onodrim-c\3rdparty_vs\glew-2.1.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>E:\dev\onodrim-c\3rdparty_vs\glfw-3.2.1.bin.WIN64\include;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\dev\onodrim-c\3rdparty_vs\glfw-3.2.1.bin.WIN64\lib-vc2015;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -105,9 +121,13 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;freeglut.lib;glew32.lib;msvcrtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\dev\onodrim-c\3rdparty_vs\freeglut\lib;E:\dev\onodrim-c\3rdparty_vs\glew-2.1.0\lib\Release\Win32;E:\dev\onodrim-c\3rdparty_vs\lib\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

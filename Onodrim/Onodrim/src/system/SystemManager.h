@@ -25,7 +25,6 @@ namespace onodrim::system {
 				if (!(*it)->CanProcessComponent(component)) {
 					continue;
 				}
-				utils::logLine(typeid(component).name());
 				(*it)->AddComponentInstance(component);
 			}
 		}

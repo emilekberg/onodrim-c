@@ -9,14 +9,14 @@ namespace onodrim
 	{
 	public:
 		Transform2d();
-		~Transform2d();
+		virtual ~Transform2d();
 
 		virtual void FixedUpdate(bool compensate);
 		void SetDirty();
 		void AddChildEntity(Entity* entity);
 
-		bool wasDirty;
-		Matrix3 worldMatrix;
+		bool WasDirty;
+		Matrix3 WorldMatrix;
 	protected:
 		Transform2d* m_pParent;
 		Vector2 m_Position;
