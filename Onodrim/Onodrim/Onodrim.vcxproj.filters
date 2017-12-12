@@ -116,5 +116,11 @@
     <ClInclude Include="src\data\RenderState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\data\GLSLShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\data\GLSLProgram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

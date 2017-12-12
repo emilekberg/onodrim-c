@@ -39,7 +39,9 @@
     <ClInclude Include="src\components\Transform2d.h" />
     <ClInclude Include="src\components\UpdateComponent.h" />
     <ClInclude Include="src\Core.h" />
+    <ClInclude Include="src\data\GLSLProgram.h" />
     <ClInclude Include="src\data\RenderState.h" />
+    <ClInclude Include="src\data\GLSLShader.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\math\Matrix3.h" />
     <ClInclude Include="src\math\Random.h" />
@@ -107,7 +109,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>E:\dev\onodrim-c\3rdparty_vs\include;E:\dev\onodrim-c\3rdparty_vs\freeglut\include;E:\dev\onodrim-c\3rdparty_vs\glew-2.1.0\include;$(IncludePath)</IncludePath>
+    <IncludePath>E:\dev\onodrim-c\3rdparty_vs\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -121,11 +123,11 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;FREEGLUT_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;freeglut.lib;glew32s.lib;msvcrtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;freeglut_staticd.lib;libglew32d.lib;msvcrtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>E:\dev\onodrim-c\3rdparty_vs\freeglut\lib;E:\dev\onodrim-c\3rdparty_vs\glew-2.1.0\lib\Release\Win32;E:\dev\onodrim-c\3rdparty_vs\lib\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
