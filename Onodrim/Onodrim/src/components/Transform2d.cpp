@@ -3,7 +3,7 @@
 #include "../system/SystemManager.h"
 namespace onodrim
 {
-	Transform2d::Transform2d()
+	Transform2d::Transform2d(Entity* pEntity) : FixedUpdateComponent(pEntity)
 	{
 		m_Scale = Vector2(1, 1);
 		m_IsDirty = true;

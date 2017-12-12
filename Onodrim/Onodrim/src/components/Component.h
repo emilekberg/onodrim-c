@@ -4,7 +4,7 @@ namespace onodrim {
 	class Component
 	{
 	public:
-		Component();
+		Component(Entity* pEntity);
 		virtual ~Component();
 
 		inline bool IsActive()
@@ -17,12 +17,12 @@ namespace onodrim {
 		void SetEntity(Entity* entity);
 		inline Entity* GetEntity()
 		{
-			return m_Entity;
+			return m_pEntity;
 		}
 
 	protected:
 		bool m_IsActive;
-		Entity* m_Entity;
+		Entity* m_pEntity;
 
 	};
 }

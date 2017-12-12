@@ -6,7 +6,7 @@ namespace onodrim
 	class Sprite : public RenderComponent
 	{
 	public:
-		Sprite();
+		Sprite(Entity* pEntity);
 		~Sprite();
 
 		float X;

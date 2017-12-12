@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include "./src/Entity.h"
 #include "./src/components/Sprite.h"
+#include "./src/components/Transform2d.h"
 /*
 #include "./src/components/Transform2d.h"
 
@@ -39,19 +40,20 @@
 // using namespace onodrim;
 // onodrim::random::Seed(time(NULL));
 
-
+onodrim::Entity* entity;
+onodrim::Sprite* sprite;
 
 #ifdef __EMSCRIPTEN__
 onodrim::Core* core;
-onodrim::Entity* entity;
-onodrim::Sprite* sprite;
+
 extern "C"
 {
 	void EMSCRIPTEN_KEEPALIVE init(int width, int height)
 	{
 		core = new onodrim::Core();
 		entity = new onodrim::Entity();
-		sprite = new onodrim::Sprite();
+		entity->AddComponent(new onodrim::Transform2d(entity));
+		sprite = new onodrim::Sprite(entity);
 		entity->AddComponent(sprite);
 	}
 
@@ -79,6 +81,10 @@ extern "C"
 int main()
 {
 	auto* core = new onodrim::Core();
+	entity = new onodrim::Entity();
+	entity->AddComponent(new onodrim::Transform2d(entity));
+	sprite = new onodrim::Sprite(entity);
+	entity->AddComponent(sprite);
 	core->Start();
 	return 0;
 }

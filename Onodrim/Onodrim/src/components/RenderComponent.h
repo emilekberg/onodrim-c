@@ -4,13 +4,14 @@
 #include "./Transform2d.h"
 #include "../math/Matrix3.h"
 #include "../data/RenderState.h"
+#include "../Entity.h"
 namespace onodrim {
 	class RenderComponent : public FixedUpdateComponent
 	{
 	public:
-		RenderComponent()
+		RenderComponent(Entity* pEntity) : FixedUpdateComponent(pEntity)
 		{
-			m_pTransform = NULL;
+			m_pTransform = m_pEntity->GetComponent<Transform2d>();
 		};
 		virtual ~RenderComponent() {};
 

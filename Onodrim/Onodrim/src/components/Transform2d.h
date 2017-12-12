@@ -8,7 +8,7 @@ namespace onodrim
 	class Transform2d : public Transform, public FixedUpdateComponent
 	{
 	public:
-		Transform2d();
+		Transform2d(Entity* pEntity);
 		virtual ~Transform2d();
 
 		virtual void FixedUpdate(bool compensate);

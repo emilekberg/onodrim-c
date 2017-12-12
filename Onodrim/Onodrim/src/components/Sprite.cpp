@@ -2,7 +2,7 @@
 #include "../utils/Logger.h"
 namespace onodrim
 {
-	Sprite::Sprite()
+	Sprite::Sprite(Entity* pEntity) : RenderComponent(pEntity)
 	{
 		X = 0;
 		Y = 0;

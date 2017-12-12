@@ -4,7 +4,7 @@ namespace onodrim {
 	class FixedUpdateComponent : public Component
 	{
 	public:
-		FixedUpdateComponent() {};
+		FixedUpdateComponent(Entity* pEntity) : Component(pEntity) {};
 		virtual ~FixedUpdateComponent() {};
 
 		virtual void FixedUpdate(bool compensate) = 0;

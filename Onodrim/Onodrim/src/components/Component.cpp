@@ -2,8 +2,9 @@
 #include "../system/SystemManager.h"
 
 namespace onodrim {
-	Component::Component()
+	Component::Component(Entity* pEntity)
 	{
+		SetEntity(pEntity);
 		Activate();
 	}
 
@@ -20,8 +21,8 @@ namespace onodrim {
 	{
 		m_IsActive = false;
 	}
-	void Component::SetEntity(Entity* entity)
+	void Component::SetEntity(Entity* pEntity)
 	{
-		m_Entity = entity;
+		m_pEntity = pEntity;
 	}
 }
