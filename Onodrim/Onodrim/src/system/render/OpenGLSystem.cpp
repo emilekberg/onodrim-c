@@ -1,6 +1,7 @@
 #include <algorithm>
 #include "./OpenGLSystem.h"
 #include "../../utils/Logger.h"
+#include "../../data/GLSLShader.h"
 #include <stdio.h>
 namespace onodrim::system::render
 {
@@ -19,9 +20,6 @@ namespace onodrim::system::render
 
 	void OpenGLSystem::InitGL()
 	{
-		#ifndef __EMSCRIPTEN__
-			glewInit();
-		#endif
 		glfwSetErrorCallback([](int error, const char * msg)
 		{
 			onodrim::utils::log(msg);
@@ -48,17 +46,15 @@ namespace onodrim::system::render
 		}	
 		glfwMakeContextCurrent(m_pWindow);
 		
-		#ifndef __EMSCRIPTEN__
-		if (glBlendEquation == NULL)
-		{
-			utils::log("OpenGLSystem::InitGL - fetching address for glBlendEquation.");
-			glBlendEquation = (PFNGLBLENDEQUATIONPROC)wglGetProcAddress("glBlendEquation");
-		}
-		#endif
-		
-		utils::log("OpenGLSystem::InitGL - vendor string: %s\n", glGetString(GL_VENDOR));
-		utils::log("OpenGLSystem::InitGL - renderer string: %s\n", glGetString(GL_RENDERER));
-		utils::log("OpenGLSystem::InitGL - version string: %s\n", glGetString(GL_VERSION));
+#ifndef __EMSCRIPTEN__
+		int argc = 1;
+		char *argv[1] = { (char*)"Something" };
+		glutInit(&argc, argv);
+		glewInit();
+#endif		
+		utils::log("OpenGLSystem::InitGL - vendor string: %s", glGetString(GL_VENDOR));
+		utils::log("OpenGLSystem::InitGL - renderer string: %s", glGetString(GL_RENDERER));
+		utils::log("OpenGLSystem::InitGL - version string: %s", glGetString(GL_VERSION));
 
 		glClearColor(0.39f, 0.58f, 0.92f, 1.0f);
 		CheckError();
@@ -73,6 +69,8 @@ namespace onodrim::system::render
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		CheckError();
 		glViewport(0, 0, m_Width, m_Height);
+
+		InitShaders();
 	}
 
 	void OpenGLSystem::CheckError()
@@ -89,67 +87,61 @@ namespace onodrim::system::render
 			// errString = gluErrorString(err);
 			utils::log("error");
 		}
-
-
-	}
-
-	GLuint OpenGLSystem::CreateShader(std::string shaderSource, int shaderType)
-	{
-		GLuint shader;
-		const GLchar* source = (const GLchar*)shaderSource.c_str();
-		switch(shaderType)
-		{
-			case 0:
-				shader = glCreateShader(GL_FRAGMENT_SHADER);
-				break;
-			case 1:
-				shader = glCreateShader(GL_VERTEX_SHADER);
-				break;
-		}
-		glShaderSource(shader, 1, &source, 0);
-		glCompileShader(shader);
-		GLint success = 0;
-		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-		if(!success)
-		{
-			utils::log("Error when compiling shader");
-
-			GLint maxLength = 0;
-			glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
-
-			std::vector<GLchar> errorLog(maxLength);
-			glGetShaderInfoLog(shader, maxLength, &maxLength, &errorLog[0]);
-			// utils::logLine(errorLog);
-			glDeleteShader(shader);
-
-			return GL_FALSE;
-		}
-		return shader;
 	}
 
 	void OpenGLSystem::InitShaders()
 	{
-		GLuint fragShader = CreateShader("", 0);
-		GLuint vertShader = CreateShader("", 1);
-		GLuint program = glCreateProgram();
-		if(!program)
-		{
-			utils::log("error when creating program");
-			return;
-		}
-		glAttachShader(program, vertShader);
-		glAttachShader(program, fragShader);
-		glLinkProgram(program);
-		GLint success = 0;
-		glGetProgramiv(program, GL_LINK_STATUS, &success);
-		if(!success)
-		{
-			utils::log("error when linking program");
-		}
-		glUseProgram(program);
+#ifndef __EMSCRIPTEN__
+		std::string vert = "#version 430 core";
+		vert += "\r\nvoid main(void)";
+		vert += "\r\n{";
+		vert += "\r\nconst vec4 vertices[3] = vec4[3](vec4( 0.25, -0.25, 0.5, 1.0),";
+		vert += "\r\nvec4(-0.25, -0.25, 0.5, 1.0),";
+		vert += "\r\nvec4( 0.25, 0.25, 0.5, 1.0));";
+		vert += "\r\ngl_Position = vertices[gl_VertexID];";
+		vert += "\r\n}";
 
-		// add hack here for initial uniform matrix;
+		std::string frag = "#version 430 core";
+		frag += "\r\nout vec4 color;";
+		frag += "\r\nvoid main(void)";
+		frag += "\r\n{";
+		frag += "\r\ncolor = vec4(0.0, 1.0, 0.0, 1.0);";
+		frag += "\r\n}";
+#else
+		std::string vert = "#version 300 es";
+		vert += "\r\nvoid main(void)";
+		vert += "\r\n{";
+		vert += "\r\nconst vec4 vertices[3] = vec4[3](vec4( 0.25, -0.25, 0.5, 1.0),";
+		vert += "\r\nvec4(-0.25, -0.25, 0.5, 1.0),";
+		vert += "\r\nvec4( 0.25, 0.25, 0.5, 1.0));";
+		vert += "\r\ngl_Position = vertices[gl_VertexID];";
+		vert += "\r\n}";
+
+		std::string frag = "#version 300 es";
+		frag += "\r\nprecision mediump float;";
+		frag += "\r\nout vec4 color;";
+		frag += "\r\nvoid main(void)";
+		frag += "\r\n{";
+		frag += "\r\ncolor = vec4(0.0, 1.0, 0.0, 1.0);";
+		frag += "\r\n}";
+
+#endif
 		
+		m_Program = std::make_unique<data::GLSLProgram>();
+		m_Frag = std::make_unique<data::GLSLShader>(GL_FRAGMENT_SHADER);
+		m_Vert = std::make_unique<data::GLSLShader>(GL_VERTEX_SHADER);
+		
+		m_Frag->SetSource(frag);
+		m_Frag->Compile();
+		m_Vert->SetSource(vert);
+		m_Vert->Compile();
+		m_Program->Init();
+		m_Program->AttachShader(*m_Vert);
+		m_Program->AttachShader(*m_Frag);
+		m_Program->Link();
+		m_Program->Use();
+		
+		utils::log("successfully initiated shaders"); 
 	}
 
 	bool OpenGLSystem::Render()
@@ -187,6 +179,11 @@ namespace onodrim::system::render
 			});
 		}
 
+		//use the created program
+		m_Program->Use();
+
+		//draw 3 vertices as triangles
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		glfwSwapBuffers(m_pWindow);
 		glfwPollEvents();

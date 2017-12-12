@@ -27,6 +27,6 @@ namespace onodrim
 
 	void Sprite::Render(float delta)
 	{
-		// utils::logLine("Rendering");
+
 	}
 }

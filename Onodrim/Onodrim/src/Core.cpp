@@ -23,6 +23,7 @@ namespace onodrim {
 
 	Core::~Core()
 	{
+	
 	}
 
 	void Core::Start() {
@@ -33,14 +34,10 @@ namespace onodrim {
 		// emscripten_set_main_loop(this->*Some_fnc_ptr, 0, 1);
 #else
 		while (GameLoop()) {};
-		#endif
-		
-
-		
+#endif
 	}
 
 	bool Core::GameLoop() {
 		return system::SystemManager::GetInstance()->Tick();
-		// std::this_thread::sleep_for(std::chrono::duration<float>(1.f/60.f));
 	}
 }

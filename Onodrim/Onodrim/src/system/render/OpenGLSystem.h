@@ -1,9 +1,9 @@
 #pragma once
+#include <memory>
 #include "../TickSystem.h"
 #include "../../components/RenderComponent.h"
 #include "../../utils/Time.h"
-
-
+#include "../../data/GLSLProgram.h"
 #ifdef __EMSCRIPTEN__
 	#include <emscripten.h>
 	#define GLFW_INCLUDE_ES3
@@ -29,6 +29,12 @@ namespace onodrim::system::render {
 			return dynamic_cast<RenderComponent*>(component) != nullptr;
 		}
 
+		virtual void AddComponentInstance(Component* component)
+		{
+			RenderComponent* casted = dynamic_cast<RenderComponent*>(component);
+			m_Components.push_back(casted);
+		}
+
 		inline virtual bool Tick()
 		{
 			return Render();
@@ -40,10 +46,11 @@ namespace onodrim::system::render {
 		void InitShaders();
 		void CheckError();
 
-	protected:
-		GLuint CreateShader(std::string source, int shaderType);
-
 	private:
+		// std::unique_ptr<data::GLSLProgram> m_Program;
+		std::unique_ptr<data::GLSLShader> m_Frag;
+		std::unique_ptr<data::GLSLShader> m_Vert;
+		std::unique_ptr<data::GLSLProgram> m_Program;
 		std::vector<RenderComponent*> m_Components;
 		int m_Width;
 		int m_Height;

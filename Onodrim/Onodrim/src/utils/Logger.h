@@ -10,7 +10,7 @@ namespace onodrim::utils {
 		va_list args;
 		va_start(args, fmt);
 		int rc = vsnprintf(buffer, sizeof(buffer), fmt, args);
-		std::cout << buffer;
+		std::cout << buffer << std::endl;
 		va_end(args);
 	}
 	inline void log(const std::string& string)
