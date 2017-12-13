@@ -1,11 +1,13 @@
 #include "./Transform2d.h"
 #include "../Entity.h"
 #include "../system/SystemManager.h"
+#include "../utils/Logger.h"
 namespace onodrim
 {
 	Transform2d::Transform2d(Entity* pEntity) : FixedUpdateComponent(pEntity)
 	{
 		m_Scale = Vector2(1, 1);
+		m_Position = Vector2(0,0);
 		m_IsDirty = true;
 		WasDirty = true;
 		m_Rotation = 0;
@@ -21,7 +23,7 @@ namespace onodrim
 
 	void Transform2d::FixedUpdate(bool compensate)
 	{
-		if (m_pParent && m_pParent->WasDirty)
+		if (HasParent() && m_pParent->WasDirty)
 		{
 			m_IsDirty = true;
 		}
@@ -32,7 +34,7 @@ namespace onodrim
 				.Scale(m_Scale.X, m_Scale.Y)
 				.Translate(m_Position.X, m_Position.Y);
 			WorldMatrix = m_LocalMatrix;
-			if (m_pParent) {
+			if (HasParent()) {
 				WorldMatrix.Multiply(m_pParent->WorldMatrix);
 			}
 		}

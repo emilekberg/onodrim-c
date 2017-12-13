@@ -92,39 +92,47 @@ namespace onodrim::system::render
 	void OpenGLSystem::InitShaders()
 	{
 #ifndef __EMSCRIPTEN__
-		std::string vert = "#version 430 core";
-		vert += "\r\nvoid main(void)";
-		vert += "\r\n{";
-		vert += "\r\nconst vec4 vertices[3] = vec4[3](vec4( 0.25, -0.25, 0.5, 1.0),";
-		vert += "\r\nvec4(-0.25, -0.25, 0.5, 1.0),";
-		vert += "\r\nvec4( 0.25, 0.25, 0.5, 1.0));";
-		vert += "\r\ngl_Position = vertices[gl_VertexID];";
-		vert += "\r\n}";
 
-		std::string frag = "#version 430 core";
-		frag += "\r\nout vec4 color;";
-		frag += "\r\nvoid main(void)";
-		frag += "\r\n{";
-		frag += "\r\ncolor = vec4(0.0, 1.0, 0.0, 1.0);";
-		frag += "\r\n}";
+		std::string vert = R"(
+			#version 430 core
+			void main(void)
+			{
+				const vec4 vertices[3] = vec4[3](vec4( 0.25, -0.25, 0.5, 1.0),
+				vec4(-0.25, -0.25, 0.5, 1.0),
+				vec4( 0.25, 0.25, 0.5, 1.0));
+				gl_Position = vertices[gl_VertexID];
+			}
+		)";
+
+		std::string frag = R"(
+			#version 430 core
+			out vec4 color;
+			void main(void)
+			{
+				color = vec4(0.0, 1.0, 0.0, 1.0);
+			}
+		)";
 #else
-		std::string vert = "#version 300 es";
-		vert += "\r\nvoid main(void)";
-		vert += "\r\n{";
-		vert += "\r\nconst vec4 vertices[3] = vec4[3](vec4( 0.25, -0.25, 0.5, 1.0),";
-		vert += "\r\nvec4(-0.25, -0.25, 0.5, 1.0),";
-		vert += "\r\nvec4( 0.25, 0.25, 0.5, 1.0));";
-		vert += "\r\ngl_Position = vertices[gl_VertexID];";
-		vert += "\r\n}";
+		std::string vert = R"(#version 300 es
+			void main(void)
+			{
+				const vec4 vertices[3] = vec4[3](
+					vec4( 0.25, -0.25, 0.5, 1.0),
+					vec4(-0.25, -0.25, 0.5, 1.0),
+					vec4( 0.25, 0.25, 0.5, 1.0)
+				);
+				gl_Position = vertices[gl_VertexID];
+			}
+		)";
 
-		std::string frag = "#version 300 es";
-		frag += "\r\nprecision mediump float;";
-		frag += "\r\nout vec4 color;";
-		frag += "\r\nvoid main(void)";
-		frag += "\r\n{";
-		frag += "\r\ncolor = vec4(0.0, 1.0, 0.0, 1.0);";
-		frag += "\r\n}";
-
+		std::string frag = R"(#version 300 es
+			precision mediump float;
+			out vec4 color;
+			void main(void)
+			{
+				color = vec4(0.0, 1.0, 0.0, 1.0);
+			}
+		)";
 #endif
 		
 		m_Program = std::make_unique<data::GLSLProgram>();

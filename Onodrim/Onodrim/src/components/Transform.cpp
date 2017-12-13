@@ -4,6 +4,7 @@ namespace onodrim
 {
 	Transform::Transform()
 	{
+		m_pParent = NULL;
 	}
 
 
