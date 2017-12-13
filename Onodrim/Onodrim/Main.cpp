@@ -4,13 +4,8 @@
 #define APIENTRY
 #endif
 #include "./src/Core.h"
-/*
-#ifndef EMSCRIPTEN_KEEPALIVE
-#define EMSCRIPTEN_KEEPALIVE
-#endif
-*/
 #ifdef __EMSCRIPTEN__
-	#include <emscripten.h>
+#include <emscripten.h>
 #endif
 
 #include <stdio.h>

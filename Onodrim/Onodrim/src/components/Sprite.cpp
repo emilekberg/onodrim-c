@@ -1,5 +1,10 @@
 #include "./Sprite.h"
 #include "../utils/Logger.h"
+#ifdef __EMSCRIPTEN__
+#include <GLES3/gl3.h>
+#else
+#include <GL\glew.h>
+#endif
 namespace onodrim
 {
 	Sprite::Sprite(Entity* pEntity) : RenderComponent(pEntity)
@@ -27,6 +32,7 @@ namespace onodrim
 
 	void Sprite::Render(float delta)
 	{
-
+		//draw 3 vertices as triangles
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 }

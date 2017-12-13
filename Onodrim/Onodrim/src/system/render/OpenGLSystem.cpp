@@ -97,9 +97,13 @@ namespace onodrim::system::render
 			#version 430 core
 			void main(void)
 			{
-				const vec4 vertices[3] = vec4[3](vec4( 0.25, -0.25, 0.5, 1.0),
-				vec4(-0.25, -0.25, 0.5, 1.0),
-				vec4( 0.25, 0.25, 0.5, 1.0));
+				const vec4 vertices[6] = vec4[6](
+					vec4( 0.25, -0.25, 0.5, 1.0),
+					vec4(-0.25, -0.25, 0.5, 1.0),
+					vec4( 0.25, 0.25, 0.5, 1.0),
+					vec4( -0.25, -0.25, 0.5, 1.0),
+					vec4(-0.25, 0.25, 0.5, 1.0),
+					vec4( 0.25, 0.25, 0.5, 1.0));
 				gl_Position = vertices[gl_VertexID];
 			}
 		)";
@@ -116,11 +120,13 @@ namespace onodrim::system::render
 		std::string vert = R"(#version 300 es
 			void main(void)
 			{
-				const vec4 vertices[3] = vec4[3](
+				const vec4 vertices[6] = vec4[6](
 					vec4( 0.25, -0.25, 0.5, 1.0),
 					vec4(-0.25, -0.25, 0.5, 1.0),
-					vec4( 0.25, 0.25, 0.5, 1.0)
-				);
+					vec4( 0.25, 0.25, 0.5, 1.0),
+					vec4( -0.25, -0.25, 0.5, 1.0),
+					vec4(-0.25, 0.25, 0.5, 1.0),
+					vec4( 0.25, 0.25, 0.5, 1.0));
 				gl_Position = vertices[gl_VertexID];
 			}
 		)";
@@ -164,6 +170,9 @@ namespace onodrim::system::render
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		bool resort = false;
+
+		//use the created program
+		m_Program->Use();
 		for (auto it = m_Components.begin(); it != m_Components.end(); it++)
 		{
 			RenderComponent* renderer = (*it);
@@ -186,12 +195,6 @@ namespace onodrim::system::render
 				return a->GetDepth() > b->GetDepth();
 			});
 		}
-
-		//use the created program
-		m_Program->Use();
-
-		//draw 3 vertices as triangles
-		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		glfwSwapBuffers(m_pWindow);
 		glfwPollEvents();
