@@ -28,15 +28,19 @@
             "includePath": [
                 "/usr/include",
                 "/usr/local/include",
-                "${workspaceRoot}"
+				"${workspaceRoot}",
+				"${workspaceRoot}/3rdparty"
             ],
-            "defines": [],
+            "defines": [
+				"__EMSCRIPTEN__"
+			],
             "intelliSenseMode": "clang-x64",
             "browse": {
                 "path": [
                     "/usr/include",
                     "/usr/local/include",
-                    "${workspaceRoot}"
+					"${workspaceRoot}",
+					"${workspaceRoot}/3rdparty"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
