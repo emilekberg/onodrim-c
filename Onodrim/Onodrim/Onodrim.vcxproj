@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\FileLoader.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="src\components\Component.cpp" />
     <ClCompile Include="src\components\RenderComponent.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="src\system\SystemManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\FileLoader.h" />
     <ClInclude Include="src\components\Component.h" />
     <ClInclude Include="src\components\FixedUpdateComponent.h" />
     <ClInclude Include="src\components\RenderComponent.h" />
