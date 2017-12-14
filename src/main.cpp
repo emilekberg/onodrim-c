@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string>
 
 #include "./onodrim-c/core.h"
 #include "./onodrim-c/entity.h"
@@ -16,6 +17,7 @@
 #include "./onodrim-c/components/transform2d.h"
 #include "./onodrim-c/utils/logger.h"
 #include "./onodrim-c/math/random.h"
+#include "./onodrim-c/fileloader.h"
 /*
 #include "./src/components/Transform2d.h"
 
@@ -37,16 +39,23 @@
 // using namespace onodrim;
 // onodrim::random::Seed(time(NULL));
 
+FileLoader* file = new FileLoader();
+
+
 onodrim::Entity* entity;
 onodrim::Sprite* sprite;
-
-#ifdef __EMSCRIPTEN__
 onodrim::Core* core;
+#ifdef __EMSCRIPTEN__
+
+
+
 
 extern "C"
 {
 	void EMSCRIPTEN_KEEPALIVE init(int width, int height)
 	{
+		file->ReadFile();
+		
 		core = new onodrim::Core();
 		entity = new onodrim::Entity();
 		entity->AddComponent(new onodrim::Transform2d(entity));
@@ -63,9 +72,7 @@ extern "C"
 	{
 		core->Start();
 		// check an see if this can be moved into gameloop
-		#ifdef __EMSCRIPTEN__
-			emscripten_set_main_loop(gameloop, 0, 0);
-		#endif
+		emscripten_set_main_loop(gameloop, 0, 0);
 	}
 
 	void EMSCRIPTEN_KEEPALIVE destroy()
@@ -77,7 +84,7 @@ extern "C"
 #else
 int main()
 {
-	auto* core = new onodrim::Core();
+	core = new onodrim::Core();
 	entity = new onodrim::Entity();
 	entity->AddComponent(new onodrim::Transform2d(entity));
 	sprite = new onodrim::Sprite(entity);
@@ -85,8 +92,6 @@ int main()
 	core->Start();
 	return 0;
 }
-
-
 #endif
 
 /*
