@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
@@ -14,10 +15,12 @@ public:
 #ifdef __EMSCRIPTEN__
 	static void OnLoad(void* argv, void* bufferPtr, int bufferLength)
 	{
-		const char* arr = static_cast<const char*>(argv);
+		auto arr = static_cast<std::string*>(argv);
+		
 		const char* buffer = static_cast<const char*>(bufferPtr);
 		std::string content(buffer, bufferLength);
-		onodrim::utils::log("OnLoad %s", (&arr[0]));
+		onodrim::utils::log("OnLoad %s", (arr));
+		delete arr;
 		onodrim::utils::log("OnLoad %s %i", content.c_str(), bufferLength);
 	}
 
@@ -27,16 +30,15 @@ public:
 		onodrim::utils::log("OnError %s", argv);
 	}
 
-	void ReadFile()
+	static void ReadFile()
 	{
-		const char* file = "bin/sprite";
+		std::string* str = new std::string("test");
 		const char* path = "bin/sprite.frag";
-		const char *argv[1] = { "Something" };
-		onodrim::utils::log("ReadFile %s", argv[0]);
-		emscripten_async_wget_data(path, &argv, OnLoad, OnError);
+		std::string argv[1] = { "Something" };
+		onodrim::utils::log("%i", sizeof(argv));
+		emscripten_async_wget_data(path, str, &OnLoad, &OnError);
 	}
 #endif
 protected:
-
 };
 

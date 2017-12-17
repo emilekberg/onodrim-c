@@ -39,9 +39,6 @@
 // using namespace onodrim;
 // onodrim::random::Seed(time(NULL));
 
-FileLoader* file = new FileLoader();
-
-
 onodrim::Entity* entity;
 onodrim::Sprite* sprite;
 onodrim::Core* core;
@@ -54,7 +51,7 @@ extern "C"
 {
 	void EMSCRIPTEN_KEEPALIVE init(int width, int height)
 	{
-		file->ReadFile();
+		FileLoader::ReadFile();
 		
 		core = new onodrim::Core();
 		entity = new onodrim::Entity();
