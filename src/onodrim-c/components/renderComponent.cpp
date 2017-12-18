@@ -12,6 +12,6 @@ namespace onodrim
 		UpdateTransform();
 		m_RenderState.WasDirty = m_pTransform->WasDirty;
 		m_RenderState.Alpha = m_Alpha;
-		// m_color.a = this.alpha;
+		m_Color.A = m_Alpha;
 	}
 }

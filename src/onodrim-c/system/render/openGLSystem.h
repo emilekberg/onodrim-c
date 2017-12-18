@@ -46,11 +46,15 @@ namespace onodrim::system::render {
 		void InitShaders();
 		void CheckError();
 
+	protected:
+		bool Resize();
+		void UpdateViewMatrix();
+
 	private:
 		// std::unique_ptr<data::GLSLProgram> m_Program;
 		std::unique_ptr<data::GLSLShader> m_Frag;
 		std::unique_ptr<data::GLSLShader> m_Vert;
-		std::unique_ptr<data::GLSLProgram> m_Program;
+		std::shared_ptr<data::GLSLProgram> m_Program;
 		std::vector<RenderComponent*> m_Components;
 		int m_Width;
 		int m_Height;

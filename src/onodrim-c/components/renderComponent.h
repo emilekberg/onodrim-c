@@ -5,6 +5,7 @@
 #include "../math/matrix3.h"
 #include "../data/renderState.h"
 #include "../entity.h"
+#include "../data/color.h"
 namespace onodrim {
 	class RenderComponent : public FixedUpdateComponent
 	{
@@ -69,6 +70,7 @@ namespace onodrim {
 		data::RenderState m_RenderState;
 		data::RenderState m_PreviousRenderState;
 		Transform2d* m_pTransform;
+		Color m_Color;
 	};
 
 

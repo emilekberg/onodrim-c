@@ -91,6 +91,7 @@ namespace onodrim::system::render
 
 	void OpenGLSystem::InitShaders()
 	{
+		// TODO: read from external file or insert compiletime
 #ifndef __EMSCRIPTEN__
 
 		std::string vert = R"(
@@ -141,7 +142,7 @@ namespace onodrim::system::render
 		)";
 #endif
 		
-		m_Program = std::make_unique<data::GLSLProgram>();
+		m_Program = std::make_shared<data::GLSLProgram>();
 		m_Frag = std::make_unique<data::GLSLShader>(GL_FRAGMENT_SHADER);
 		m_Vert = std::make_unique<data::GLSLShader>(GL_VERTEX_SHADER);
 		
@@ -155,6 +156,7 @@ namespace onodrim::system::render
 		m_Program->Link();
 		m_Program->Use();
 		
+		// TODO: fixed projection matrix.
 		utils::log("successfully initiated shaders"); 
 	}
 
@@ -162,9 +164,14 @@ namespace onodrim::system::render
 	{
 		// utils::logLine("OpenGLSystem::Render()");
 		float renderDelta = 0.f;
-		if(false)
+		// TODO: see if this can be here
+		// const delta = (Time.now()-this.fixedUpdateSystem.currentUpdateTime)/this.fixedUpdateSystem.updateRate;
+
+		if(Resize() || false)	// false is Camerasystem.MAIN.isDirty
 		{
-			// check resize and similar
+			// TODO: Implement
+			// CameraSystem.MAIN.interpolateMatrix(delta);
+			UpdateViewMatrix();
 		}
 		glViewport(0, 0, m_Width, m_Height);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -208,5 +215,30 @@ namespace onodrim::system::render
 		}
 #endif
 		return true;
+	}
+
+	bool OpenGLSystem::Resize()
+	{
+		// TODO: implement
+		/*
+			const ratio = window.devicePixelRatio || 1;
+			const canvas = gl.canvas;
+			const width = Math.floor(canvas.clientWidth * ratio);
+			const height = Math.floor(canvas.clientHeight * ratio);
+			if (canvas.width !== width || canvas.height !== height) {
+				canvas.width = width;
+				canvas.height = height;
+				CameraSystem.MAIN.setViewport(width, height);
+				return true;
+			}
+			return false;
+		*/
+		return false;
+	}
+
+	void OpenGLSystem::UpdateViewMatrix()
+	{
+		// TODO: implement
+		// gl.uniformMatrix3fv(this._projectionMatrixLocation, false, CameraSystem.MAIN.matrix.values);
 	}
 }
