@@ -4,6 +4,7 @@
 #include "../../components/renderComponent.h"
 #include "../../utils/time.h"
 #include "../../data/glslProgram.h"
+// #include "./opengl/sprite-batch.h"
 #ifdef __EMSCRIPTEN__
 	#include <emscripten.h>
 	#define GLFW_INCLUDE_ES3
@@ -59,6 +60,7 @@ namespace onodrim::system::render {
 		int m_Width;
 		int m_Height;
 		GLFWwindow* m_pWindow;
+		// std::shared_ptr<opengl::SpriteBatch> m_SpriteBatch;
 	};
 
 
