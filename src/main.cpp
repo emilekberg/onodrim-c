@@ -18,6 +18,7 @@
 #include "./onodrim-c/utils/logger.h"
 #include "./onodrim-c/math/random.h"
 #include "./onodrim-c/fileloader.h"
+#include "./onodrim-c/JSON.h"
 /*
 #include "./src/components/Transform2d.h"
 
@@ -51,7 +52,7 @@ extern "C"
 {
 	void EMSCRIPTEN_KEEPALIVE init(int width, int height)
 	{
-		FileLoader::ReadFile();
+		FileLoader::ReadFile("bin/sprite.frag");
 		
 		core = new onodrim::Core();
 		entity = new onodrim::Entity();
@@ -81,6 +82,24 @@ extern "C"
 #else
 int main()
 {
+	/*std::string buffer =
+		R"({
+	str: "hello",
+	int: 1,
+	float: 2.5,
+	child: {
+		name: "emil"
+	}	
+})";*/
+	std::string buffer =
+R"({
+	str: "hello",
+	int: 1,
+	float: 2.5
+})";
+	JSON j(buffer);
+
+
 	core = new onodrim::Core();
 	entity = new onodrim::Entity();
 	entity->AddComponent(new onodrim::Transform2d(entity));
