@@ -28,10 +28,12 @@
     <ClCompile Include="onodrim-c\components\transform2d.cpp" />
     <ClCompile Include="onodrim-c\core.cpp" />
     <ClCompile Include="onodrim-c\entity.cpp" />
+    <ClCompile Include="onodrim-c\JSON.cpp" />
     <ClCompile Include="onodrim-c\system\render\openGLSystem.cpp" />
     <ClCompile Include="onodrim-c\system\systemManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="onodrim-c\JSON.h" />
     <ClInclude Include="onodrim-c\fileloader.h" />
     <ClInclude Include="onodrim-c\components\component.h" />
     <ClInclude Include="onodrim-c\components\fixedUpdateComponent.h" />
