@@ -39,7 +39,7 @@
 // using namespace std;
 // using namespace onodrim;
 // onodrim::random::Seed(time(NULL));
-
+using namespace onodrim::utils;
 onodrim::Entity* entity;
 onodrim::Sprite* sprite;
 onodrim::Core* core;
@@ -52,13 +52,25 @@ extern "C"
 {
 	void EMSCRIPTEN_KEEPALIVE init(int width, int height)
 	{
-		FileLoader::ReadFile("bin/sprite.frag");
+		FileLoader::FileLoaderCallback cb = [&](std::string path, bool success, std::string data)
+		{
+			log("ReadFile Done %i", success);
+			if(success)
+			{
+				log(data);
+			}
+		};
+		FileLoader::ReadFile("bin/shaders/sprite.web.frag", cb);
+		FileLoader::ReadFile("bin/shaders/sprite.web.vert", cb);
+		// std::string content = onodrim::FileLoader::ReadFilePromise("bin/shaders/sprite.web.frag");
+		// onodrim::utils::log(content);
 		
 		core = new onodrim::Core();
 		entity = new onodrim::Entity();
 		entity->AddComponent(new onodrim::Transform2d(entity));
 		sprite = new onodrim::Sprite(entity);
 		entity->AddComponent(sprite);
+		
 	}
 
 	void EMSCRIPTEN_KEEPALIVE gameloop()
@@ -75,7 +87,7 @@ extern "C"
 
 	void EMSCRIPTEN_KEEPALIVE destroy()
 	{
-		onodrim::utils::log("Core Destroyed");
+		log("Core Destroyed");
 		delete core;
 	}
 }

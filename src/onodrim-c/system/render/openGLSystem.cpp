@@ -145,14 +145,16 @@ namespace onodrim::system::render
 		m_Program = std::make_shared<data::GLSLProgram>();
 		m_Frag = std::make_unique<data::GLSLShader>(GL_FRAGMENT_SHADER);
 		m_Vert = std::make_unique<data::GLSLShader>(GL_VERTEX_SHADER);
+		m_Program->Init();
 		
 		m_Frag->SetSource(frag);
 		m_Frag->Compile();
 		m_Vert->SetSource(vert);
 		m_Vert->Compile();
-		m_Program->Init();
+		
 		m_Program->AttachShader(*m_Vert);
 		m_Program->AttachShader(*m_Frag);
+		
 		m_Program->Link();
 		m_Program->Use();
 		
@@ -177,9 +179,6 @@ namespace onodrim::system::render
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		bool resort = false;
-
-		//use the created program
-		m_Program->Use();
 		for (auto it = m_Components.begin(); it != m_Components.end(); it++)
 		{
 			RenderComponent* renderer = (*it);
@@ -219,6 +218,15 @@ namespace onodrim::system::render
 
 	bool OpenGLSystem::Resize()
 	{
+		return false;
+		/*#ifdef __EMSCRIPTEN__
+		double ratio = emscripten_get_device_pixel_ratio();
+		int width;
+		int height;
+		int fullscreen;
+		emscripten_get_canvas_size(&width, &height, &fullscreen);
+
+		#endif*/
 		// TODO: implement
 		/*
 			const ratio = window.devicePixelRatio || 1;
