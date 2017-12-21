@@ -22,11 +22,11 @@ namespace onodrim::system::render
 	{
 		glfwSetErrorCallback([](int error, const char * msg)
 		{
-			onodrim::utils::log(msg);
+			LOG_ERROR("gl error number:%i msg:%s", error, msg);
 		});
 		if(!glfwInit())
 		{
-			onodrim::utils::log("Failed to initialize GLFW");
+			LOG_ERROR("Failed to initialize GLFW");
 			// onodrim::utils::logLine(stderr);
 		}
 
@@ -36,7 +36,7 @@ namespace onodrim::system::render
 		m_pWindow = glfwCreateWindow(m_Width, m_Height, "Onodrim", NULL, NULL);
 		if(!m_pWindow)
 		{
-			onodrim::utils::log("Failed to create GLFW window");
+			LOG_ERROR("Failed to create GLFW window");
 			// onodrim::utils::logLine(stderr);
 			glfwTerminate();
 			#ifdef __EMSCRIPTEN__
@@ -52,9 +52,10 @@ namespace onodrim::system::render
 		glutInit(&argc, argv);
 		glewInit();
 #endif		
-		utils::log("OpenGLSystem::InitGL - vendor string: %s", glGetString(GL_VENDOR));
-		utils::log("OpenGLSystem::InitGL - renderer string: %s", glGetString(GL_RENDERER));
-		utils::log("OpenGLSystem::InitGL - version string: %s", glGetString(GL_VERSION));
+		LOG_INFO("OpenGLSystem::InitGL \n\t \
+				vendor string: %s \n\t \
+				renderer string: %s \n\t \
+				version string: %s", glGetString(GL_VENDOR), glGetString(GL_RENDERER), glGetString(GL_VERSION));
 
 		glClearColor(0.39f, 0.58f, 0.92f, 1.0f);
 		CheckError();
@@ -78,14 +79,14 @@ namespace onodrim::system::render
 		GLenum err = glGetError();
 		if (err != GL_NO_ERROR)
 		{ 
-			utils::log("error");
+			LOG_ERROR("error");
 		}
 		// const GLubyte* gluErrorString(GLenum errorCode);
 
 		if (err != GL_NO_ERROR)
 		{
 			// errString = gluErrorString(err);
-			utils::log("error");
+			LOG_ERROR("error");
 		}
 	}
 
@@ -159,7 +160,7 @@ namespace onodrim::system::render
 		m_Program->Use();
 		
 		// TODO: fixed projection matrix.
-		utils::log("successfully initiated shaders"); 
+		LOG_INFO("successfully initiated shaders"); 
 	}
 
 	bool OpenGLSystem::Render()

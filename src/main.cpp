@@ -52,18 +52,17 @@ extern "C"
 {
 	void EMSCRIPTEN_KEEPALIVE init(int width, int height)
 	{
+		LOG_INFO("called from js: init(%i,%i)", width, height);
 		FileLoader::FileLoaderCallback cb = [&](std::string path, bool success, std::string data)
 		{
-			log("ReadFile Done %i", success);
+			LOG_DEBUG("ReadFile Done %i", success);
 			if(success)
 			{
-				log(data);
+				LOG_DEBUG(data.c_str());
 			}
 		};
 		FileLoader::ReadFile("bin/shaders/sprite.web.frag", cb);
 		FileLoader::ReadFile("bin/shaders/sprite.web.vert", cb);
-		// std::string content = onodrim::FileLoader::ReadFilePromise("bin/shaders/sprite.web.frag");
-		// onodrim::utils::log(content);
 		
 		core = new onodrim::Core();
 		entity = new onodrim::Entity();
@@ -87,7 +86,7 @@ extern "C"
 
 	void EMSCRIPTEN_KEEPALIVE destroy()
 	{
-		log("Core Destroyed");
+		LOG_INFO("called from js: destroy()");
 		delete core;
 	}
 }

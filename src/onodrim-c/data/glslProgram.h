@@ -25,7 +25,7 @@ namespace onodrim::data
 			m_ProgramAddr = glCreateProgram();
 			if (!m_ProgramAddr)
 			{
-				utils::log("GLSLProgram::GLSLProgram() - error when creating program");
+				LOG_ERROR("GLSLProgram::GLSLProgram() - error when creating program");
 			}
 		}
 
@@ -42,7 +42,7 @@ namespace onodrim::data
 			glGetProgramiv(m_ProgramAddr, GL_LINK_STATUS, &success);
 			if (!success)
 			{
-				utils::log("error when linking program");
+				LOG_ERROR("error when linking program");
 			}
 		}
 

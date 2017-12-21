@@ -30,7 +30,7 @@ namespace onodrim::data
 
 		void SetSource(const std::string& source)
 		{
-			utils::log("GLSLShader::SetSource");
+			LOG_INFO("GLSLShader::SetSource");
 			m_Source = source;
 			const GLchar* src = ((const GLchar*)m_Source.c_str());
 			glShaderSource(m_ShaderAddr, 1, &src, 0);
@@ -43,14 +43,14 @@ namespace onodrim::data
 			glGetShaderiv(m_ShaderAddr, GL_COMPILE_STATUS, &compileSuccessful);
 			if (compileSuccessful == GL_FALSE)
 			{
-				utils::log("Error when compiling shader, path: %s", m_Path.c_str());
+				LOG_ERROR("Error when compiling shader, path: %s", m_Path.c_str());
 				GLint maxLength = 0;
 				glGetShaderiv(m_ShaderAddr, GL_INFO_LOG_LENGTH, &maxLength);
 
 				GLchar* errorLog = new GLchar[maxLength + 1];
 				glGetShaderInfoLog(m_ShaderAddr, maxLength, &maxLength, errorLog);
 
-				utils::log("%s\n", errorLog);
+				LOG_ERROR("%s", errorLog);
 				glDeleteShader(m_ShaderAddr);
 				m_ShaderAddr = NULL;
 				return false;

@@ -3,7 +3,7 @@
 namespace onodrim::system {
 	SystemManager::SystemManager()
 	{
-		utils::log("SystemManager created");
+		LOG_INFO("SystemManager created");
 	}
 
 
@@ -17,8 +17,7 @@ namespace onodrim::system {
 	}
 	void SystemManager::AddSystem(TickSystem* system)
 	{
-		std::string test = typeid(system).name();
-		utils::log("SystemManager::AddSystem(" + test + ");");
+		LOG_INFO("SystemManager::AddSystem(%s);", typeid(system).name());
 		this->m_TickSystems.push_back(system);
 		this->AddSystem(static_cast<BaseSystem*>(system));
 	}
