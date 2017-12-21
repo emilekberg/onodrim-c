@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="onodrim-c\fileloader.cpp" />
     <ClCompile Include="onodrim-c\components\component.cpp" />
     <ClCompile Include="onodrim-c\components\renderComponent.cpp" />
     <ClCompile Include="onodrim-c\components\sprite.cpp" />

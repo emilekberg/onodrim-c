@@ -15,15 +15,7 @@ static const char* LOG_LEVEL_STRINGS[] = {
 	"ERROR",
 	"FATAL"
 };
-//#define LOG_GENERAL(level, line, format, ...) \
-	do \
-	{ \
-		printf("%i\t%s: ", line, LOG_LEVEL_STRINGS[level]); \
-		va_start(__VA_ARGS__, format); \
-		vprintf(format, __VA_ARGS__); \
-		va_end(__VA_ARGS__); \
-		printf("\r\n"); \
-	}while(0)
+
 namespace onodrim::utils
 {
 	static inline void log(const char* format, ...)
@@ -39,7 +31,6 @@ namespace onodrim::utils
 	}
 	static inline void log(int level, int file_line, const char* file, const char* function, const char* format, ...)
 	{
-		//LOG_LINE++;
 		printf("%s:\t", LOG_LEVEL_STRINGS[level]);
 		va_list args;
 		va_start(args, format);
@@ -55,4 +46,3 @@ namespace onodrim::utils
 #define LOG_DEBUG(format, ...) LOG_GENERAL(LOG_LEVEL_DEBUG, format, ##__VA_ARGS__)
 #define LOG_ERROR(format, ...) LOG_GENERAL(LOG_LEVEL_ERROR, format, ##__VA_ARGS__)
 #define LOG_FATAL(format, ...) LOG_GENERAL(LOG_LEVEL_FATAL, format, ##__VA_ARGS__)
-#define MACRO(s, ...) printf(s, ##__VA_ARGS__)
