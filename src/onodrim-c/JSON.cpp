@@ -5,7 +5,7 @@
 #include <unordered_map>
 JSON::JSON(std::string& input) : m_Buffer(TrimString(input))
 {
-	onodrim::utils::log("JSON::CTOR = %s",m_Buffer.c_str());
+	LOG_DEBUG("JSON::CTOR = %s",m_Buffer.c_str());
 	int start = 35;
 	int closingBracket = FindIndexOfClosingBracket(start);
 

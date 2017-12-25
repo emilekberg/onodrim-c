@@ -25,9 +25,9 @@ namespace onodrim
 
 		inline void SetColor(int hex)
 		{
-			R = ((hex >> 16) & 0xFF) / 255;
-			G = ((hex >> 8) & 0xFF) / 255;
-			B = ((hex) & 0xFF) / 255;
+			R = ((hex >> 16) & 0xFF) / 255.f;
+			G = ((hex >> 8) & 0xFF) / 255.f;
+			B = ((hex) & 0xFF) / 255.f;
 		}
 		inline void SetRGBA(float r, float g, float b, float a)
 		{

@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="onodrim-c\fileloader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="onodrim-c\components\component.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -80,13 +77,7 @@
     <ClInclude Include="onodrim-c\core.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="onodrim-c\data\glslProgram.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="onodrim-c\data\renderState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="onodrim-c\data\glslShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="onodrim-c\Entity.h">
@@ -132,6 +123,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="onodrim-c\JSON.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="onodrim-c\data\gl-texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="onodrim-c\data\glslShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="onodrim-c\data\glslProgram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="onodrim-c\math\rect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="onodrim-c\data\color.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="onodrim-c\math\vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

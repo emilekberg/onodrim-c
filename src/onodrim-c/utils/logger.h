@@ -3,6 +3,13 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <iostream>
+#ifndef _WIN32
+#include <libgen.h>
+#else
+#include <experimental/filesystem>
+#include <filesystem>
+#define basename(file)(file)
+#endif
 
 static const unsigned char LOG_LEVEL_INFO = 0;
 static const unsigned char LOG_LEVEL_DEBUG = 1;
@@ -20,6 +27,7 @@ namespace onodrim::utils
 {
 	static inline void log(const char* format, ...)
 	{
+		
 		va_list args;
 		va_start(args, format);
 		vprintf(format, args);
@@ -31,12 +39,12 @@ namespace onodrim::utils
 	}
 	static inline void log(int level, int file_line, const char* file, const char* function, const char* format, ...)
 	{
-		printf("%s:\t", LOG_LEVEL_STRINGS[level]);
+		printf("[%s]%s:%i:%s: ", LOG_LEVEL_STRINGS[level], basename((char*)file), file_line, function);
 		va_list args;
 		va_start(args, format);
 		vprintf(format, args);
 		va_end(args);
-		printf("\t\t%s:%i:%s\r\n", file, file_line, function);
+		printf("\r\n");
 	}
 }
 

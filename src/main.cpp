@@ -1,5 +1,6 @@
 #ifdef _WIN32
 #include <windows.h>
+
 #else
 #define APIENTRY
 #endif
@@ -19,6 +20,7 @@
 #include "./onodrim-c/math/random.h"
 #include "./onodrim-c/fileloader.h"
 #include "./onodrim-c/JSON.h"
+#include "./onodrim-c/math/vector.h"
 /*
 #include "./src/components/Transform2d.h"
 
@@ -52,6 +54,17 @@ extern "C"
 {
 	void EMSCRIPTEN_KEEPALIVE init(int width, int height)
 	{
+		onodrim::Vector<float, 3> first
+		{
+			0.0f, 1.0f, 0.0f
+		};
+		onodrim::Vector<float, 3> second
+		{
+			0.0f, 1.2f, 0.3f
+		};
+
+		onodrim::Vector<float, 3> third = first + second;
+
 		LOG_INFO("called from js: init(%i,%i)", width, height);
 		FileLoader::FileLoaderCallback cb = [&](std::string path, bool success, std::string data)
 		{
@@ -93,15 +106,6 @@ extern "C"
 #else
 int main()
 {
-	/*std::string buffer =
-		R"({
-	str: "hello",
-	int: 1,
-	float: 2.5,
-	child: {
-		name: "emil"
-	}	
-})";*/
 	std::string buffer =
 R"({
 	str: "hello",
@@ -110,6 +114,25 @@ R"({
 })";
 	JSON j(buffer);
 
+	onodrim::Vector<float, 3> first
+	{
+		0.0f, 1.0f, 0.0f
+	};
+	onodrim::Vector<float, 3> second
+	{
+		0.0f, 1.2f, 0.3f
+	};
+
+	onodrim::Vector<float, 3> third = first + second;
+
+
+	first = {
+		1.0f, 1.0f, 1.0f
+	};
+
+
+
+	
 
 	core = new onodrim::Core();
 	entity = new onodrim::Entity();
@@ -120,42 +143,3 @@ R"({
 	return 0;
 }
 #endif
-
-/*
-int main() 
-{
-	onodrim::utils::logLine("Hello World!");
-	
-	onodrim::random::Seed(time(NULL));
-	onodrim::Vector2 vector;
-	onodrim::Matrix3 mat;
-
-	mat.Identity().Translate(1, 0);
-	onodrim::utils::logLine("some value");
-
-	onodrim::Core* core = new onodrim::Core();
-	
-
-	Entity* parent = new Entity();
-	Entity* child = new Entity();
-
-	
-	Transform2d* parentTransform = new Transform2d();
-	Transform2d* childTransform = new Transform2d();
-	utils::logLine("create Transform for parent");
-	parent->AddComponent(parentTransform);
-	utils::logLine("create Transform for child");
-	child->AddComponent(childTransform);
-	utils::logLine("create empty component for child");
-	child->AddComponent(new Component());
-
-	Component* test = dynamic_cast<Component*>(childTransform);
-	Entity* test2 = dynamic_cast<Entity*>(childTransform);
-	parentTransform->AddChildEntity(child);
-
-
-	// core->Start();
-	return 0;
-}
-
-*/

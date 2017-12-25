@@ -32,6 +32,8 @@
     <ClCompile Include="onodrim-c\system\systemManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="onodrim-c\data\color.h" />
+    <ClInclude Include="onodrim-c\data\gl-texture.h" />
     <ClInclude Include="onodrim-c\JSON.h" />
     <ClInclude Include="onodrim-c\fileloader.h" />
     <ClInclude Include="onodrim-c\components\component.h" />
@@ -48,6 +50,8 @@
     <ClInclude Include="onodrim-c\Entity.h" />
     <ClInclude Include="onodrim-c\math\matrix3.h" />
     <ClInclude Include="onodrim-c\math\random.h" />
+    <ClInclude Include="onodrim-c\math\rect.h" />
+    <ClInclude Include="onodrim-c\math\vector.h" />
     <ClInclude Include="onodrim-c\math\vector2.h" />
     <ClInclude Include="onodrim-c\system\baseSystem.h" />
     <ClInclude Include="onodrim-c\system\fixedUpdateSystem.h" />
@@ -127,6 +131,8 @@
       <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PreprocessorDefinitions>GLEW_STATIC;FREEGLUT_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
