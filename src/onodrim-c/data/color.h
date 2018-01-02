@@ -6,12 +6,12 @@ namespace onodrim
 	public:
 		Color()
 		{
-			SetColor(0xFFFFFF);
+			SetHex(0xFFFFFF);
 			A = 1;
 		}
 		Color(int hex)
 		{
-			SetColor(hex);
+			SetHex(hex);
 			A = 1;
 		}
 		Color(float r, float g, float b, float a = 1.0f)
@@ -23,7 +23,7 @@ namespace onodrim
 
 		}
 
-		inline void SetColor(int hex)
+		inline void SetHex(int hex)
 		{
 			R = ((hex >> 16) & 0xFF) / 255.f;
 			G = ((hex >> 8) & 0xFF) / 255.f;

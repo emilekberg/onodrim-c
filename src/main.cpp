@@ -74,8 +74,8 @@ extern "C"
 				LOG_DEBUG(data.c_str());
 			}
 		};
-		FileLoader::ReadFile("bin/shaders/sprite.web.frag", cb);
-		FileLoader::ReadFile("bin/shaders/sprite.web.vert", cb);
+		// FileLoader::ReadFile("bin/shaders/sprite.web.frag", cb);
+		// FileLoader::ReadFile("bin/shaders/sprite.web.vert", cb);
 		
 		core = new onodrim::Core();
 		entity = new onodrim::Entity();

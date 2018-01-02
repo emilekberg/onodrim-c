@@ -59,6 +59,7 @@
 		"future": "cpp",
 		"atomic": "cpp",
 		"condition_variable": "cpp",
-		"mutex": "cpp"
+		"mutex": "cpp",
+		"filesystem": "cpp"
 	}
 }

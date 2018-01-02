@@ -50,6 +50,11 @@ namespace onodrim::data
 		{
 			glUseProgram(m_ProgramAddr);
 		}
+		
+		inline GLuint GetAddress()
+		{
+			return m_ProgramAddr;
+		}
 
 	protected:
 		GLuint m_ProgramAddr;

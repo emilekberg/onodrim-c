@@ -47,6 +47,11 @@ namespace onodrim::system::render {
 		void InitShaders();
 		void CheckError();
 
+
+		inline std::shared_ptr<data::GLSLProgram> GetProgram()
+		{
+			return m_Program;
+		}
 	protected:
 		bool Resize();
 		void UpdateViewMatrix();

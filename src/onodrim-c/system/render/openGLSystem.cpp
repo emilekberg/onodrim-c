@@ -97,16 +97,10 @@ namespace onodrim::system::render
 
 		std::string vert = R"(
 			#version 430 core
+			in vec2 vertex;
 			void main(void)
 			{
-				const vec4 vertices[6] = vec4[6](
-					vec4( 0.25, -0.25, 0.5, 1.0),
-					vec4(-0.25, -0.25, 0.5, 1.0),
-					vec4( 0.25, 0.25, 0.5, 1.0),
-					vec4( -0.25, -0.25, 0.5, 1.0),
-					vec4(-0.25, 0.25, 0.5, 1.0),
-					vec4( 0.25, 0.25, 0.5, 1.0));
-				gl_Position = vertices[gl_VertexID];
+				gl_Position = vec4(vertex, 0, 1);
 			}
 		)";
 
@@ -120,16 +114,10 @@ namespace onodrim::system::render
 		)";
 #else
 		std::string vert = R"(#version 300 es
+			in vec2 vertex;
 			void main(void)
 			{
-				const vec4 vertices[6] = vec4[6](
-					vec4( 0.25, -0.25, 0.5, 1.0),
-					vec4(-0.25, -0.25, 0.5, 1.0),
-					vec4( 0.25, 0.25, 0.5, 1.0),
-					vec4( -0.25, -0.25, 0.5, 1.0),
-					vec4(-0.25, 0.25, 0.5, 1.0),
-					vec4( 0.25, 0.25, 0.5, 1.0));
-				gl_Position = vertices[gl_VertexID];
+				gl_Position = vec4(vertex, 0, 1);
 			}
 		)";
 

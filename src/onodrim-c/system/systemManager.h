@@ -43,11 +43,20 @@ namespace onodrim::system {
 		template <typename T>
 		T* GetSystem()
 		{
-			auto it = std::find_if(m_Systems.begin(), m_Systems.end(), [](BaseSystem* s) -> bool
+			for (auto it = m_Systems.begin(); it != m_Systems.end(); it++)
+			{
+				T* result = dynamic_cast<T*>((*it));
+				if (result != nullptr)
+				{
+					return result;
+				}
+			}
+			return NULL;
+			/*auto it = std::find_if(m_Systems.begin(), m_Systems.end(), [](BaseSystem* s) -> bool
 			{
 				return dynamic_cast<T*>(s) != nullptr;
 			});
-			return (*it);
+			return (*it);*/
 		}
 		template <typename T>
 		std::vector<BaseSystem*> GetAllSystems()
