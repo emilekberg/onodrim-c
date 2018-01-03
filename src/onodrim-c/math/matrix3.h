@@ -20,6 +20,11 @@ namespace onodrim {
 
 		}
 
+		float* GetArray()
+		{
+			return m_Values.data();
+		}
+
 		Matrix3 static MakeIdentity()
 		{
 			return Matrix3(std::begin<float>({ 1, 0, 0, 0, 1, 0, 0, 0, 1 }));

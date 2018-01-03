@@ -35,9 +35,12 @@ namespace onodrim
 
 		GLuint vertex_buffer = NULL;
 		GLuint index_buffer = NULL;
+		GLuint matrix_buffer = NULL;
+
+
 		GLint vertLocation = NULL;
-
-
+		GLint matrixLocation = NULL;
+		GLuint vao;
 
 		float m_Width;
 		float m_Height;

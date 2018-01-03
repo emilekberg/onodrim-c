@@ -98,9 +98,14 @@ namespace onodrim::system::render
 		std::string vert = R"(
 			#version 430 core
 			in vec2 vertex;
+
+			in mat3 matrix;
 			void main(void)
 			{
-				gl_Position = vec4(vertex, 0, 1);
+				// vec3 pos = matrix * vec3(vertex, 1);
+				// mat3 matrix = mat3(0.5,0,0,0,0.5,0,0,0,1);
+				vec3 pos = matrix * vec3(vertex, 1);
+				gl_Position = vec4(pos, 1);
 			}
 		)";
 
@@ -115,9 +120,12 @@ namespace onodrim::system::render
 #else
 		std::string vert = R"(#version 300 es
 			in vec2 vertex;
+			in mat3 matrix;
 			void main(void)
 			{
-				gl_Position = vec4(vertex, 0, 1);
+				vec3 pos = matrix * vec3(vertex, 1);
+				gl_Position = vec4(pos, 1);
+				//gl_Position = vec4(vertex, 0, 1);
 			}
 		)";
 
