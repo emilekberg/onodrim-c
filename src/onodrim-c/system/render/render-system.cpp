@@ -1,11 +1,11 @@
 #include <algorithm>
-#include "./openGLSystem.h"
+#include "./render-system.h"
 #include "../../utils/logger.h"
-#include "../../data/glslShader.h"
+#include "../../shaders/sprite.h"
 #include <stdio.h>
 namespace onodrim::system::render
 {
-	OpenGLSystem::OpenGLSystem()
+	RenderSystem::RenderSystem()
 	{
 		m_Width = 800;
 		m_Height = 600;
@@ -13,12 +13,12 @@ namespace onodrim::system::render
 
 		InitGL();
 	}
-	OpenGLSystem::~OpenGLSystem()
+	RenderSystem::~RenderSystem()
 	{
 
 	}
 
-	void OpenGLSystem::InitGL()
+	void RenderSystem::InitGL()
 	{
 		glfwSetErrorCallback([](int error, const char * msg)
 		{
@@ -52,10 +52,7 @@ namespace onodrim::system::render
 		glutInit(&argc, argv);
 		glewInit();
 #endif		
-		LOG_INFO("OpenGLSystem::InitGL \n\t \
-				vendor string: %s \n\t \
-				renderer string: %s \n\t \
-				version string: %s", glGetString(GL_VENDOR), glGetString(GL_RENDERER), glGetString(GL_VERSION));
+		LOG_INFO("OpenGLSystem::InitGL \n\t %s: %s \n\t %s: %s \n\t %s: %s", "vendor string", glGetString(GL_VENDOR), "renderer string", glGetString(GL_RENDERER), "version string", glGetString(GL_VERSION));
 
 		glClearColor(0.39f, 0.58f, 0.92f, 1.0f);
 		CheckError();
@@ -74,7 +71,7 @@ namespace onodrim::system::render
 		InitShaders();
 	}
 
-	void OpenGLSystem::CheckError()
+	void RenderSystem::CheckError()
 	{
 		GLenum err = glGetError();
 		if (err != GL_NO_ERROR)
@@ -90,76 +87,13 @@ namespace onodrim::system::render
 		}
 	}
 
-	void OpenGLSystem::InitShaders()
+	void RenderSystem::InitShaders()
 	{
-		// TODO: read from external file or insert compiletime
-#ifndef __EMSCRIPTEN__
-
-		std::string vert = R"(
-			#version 430 core
-			in vec2 vertex;
-
-			in mat3 matrix;
-			void main(void)
-			{
-				// vec3 pos = matrix * vec3(vertex, 1);
-				// mat3 matrix = mat3(0.5,0,0,0,0.5,0,0,0,1);
-				vec3 pos = matrix * vec3(vertex, 1);
-				gl_Position = vec4(pos, 1);
-			}
-		)";
-
-		std::string frag = R"(
-			#version 430 core
-			out vec4 color;
-			void main(void)
-			{
-				color = vec4(0.0, 1.0, 0.0, 1.0);
-			}
-		)";
-#else
-		std::string vert = R"(#version 300 es
-			in vec2 vertex;
-			in mat3 matrix;
-			void main(void)
-			{
-				vec3 pos = matrix * vec3(vertex, 1);
-				gl_Position = vec4(pos, 1);
-				//gl_Position = vec4(vertex, 0, 1);
-			}
-		)";
-
-		std::string frag = R"(#version 300 es
-			precision mediump float;
-			out vec4 color;
-			void main(void)
-			{
-				color = vec4(0.0, 1.0, 0.0, 1.0);
-			}
-		)";
-#endif
-		
-		m_Program = std::make_shared<data::GLSLProgram>();
-		m_Frag = std::make_unique<data::GLSLShader>(GL_FRAGMENT_SHADER);
-		m_Vert = std::make_unique<data::GLSLShader>(GL_VERTEX_SHADER);
-		m_Program->Init();
-		
-		m_Frag->SetSource(frag);
-		m_Frag->Compile();
-		m_Vert->SetSource(vert);
-		m_Vert->Compile();
-		
-		m_Program->AttachShader(*m_Vert);
-		m_Program->AttachShader(*m_Frag);
-		
-		m_Program->Link();
-		m_Program->Use();
-		
-		// TODO: fixed projection matrix.
+		m_Spritebatch = std::make_shared<Spritebatch>();
 		LOG_INFO("successfully initiated shaders"); 
 	}
 
-	bool OpenGLSystem::Render()
+	bool RenderSystem::Render()
 	{
 		// utils::logLine("OpenGLSystem::Render()");
 		float renderDelta = 0.f;
@@ -175,6 +109,7 @@ namespace onodrim::system::render
 		glViewport(0, 0, m_Width, m_Height);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		m_Spritebatch->Begin();
 		bool resort = false;
 		for (auto it = m_Components.begin(); it != m_Components.end(); it++)
 		{
@@ -190,6 +125,7 @@ namespace onodrim::system::render
 			}
 			renderer->Render(renderDelta);
 		}
+		m_Spritebatch->End();
 		// flush spritebatch
 		glFlush();
 		if(resort)
@@ -213,7 +149,7 @@ namespace onodrim::system::render
 		return true;
 	}
 
-	bool OpenGLSystem::Resize()
+	bool RenderSystem::Resize()
 	{
 		return false;
 		/*#ifdef __EMSCRIPTEN__
@@ -241,7 +177,7 @@ namespace onodrim::system::render
 		return false;
 	}
 
-	void OpenGLSystem::UpdateViewMatrix()
+	void RenderSystem::UpdateViewMatrix()
 	{
 		// TODO: implement
 		// gl.uniformMatrix3fv(this._projectionMatrixLocation, false, CameraSystem.MAIN.matrix.values);

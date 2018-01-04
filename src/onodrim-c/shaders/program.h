@@ -5,17 +5,17 @@
 #include <GLES3/gl3.h>
 #endif
 #include "../utils/logger.h"
-#include "./glslShader.h"
-namespace onodrim::data
+#include "./shader.h"
+namespace onodrim::shaders
 {
-	class GLSLProgram
+	class Program
 	{
 	public:
-		GLSLProgram()
+		Program()
 		{
 			
 		}
-		~GLSLProgram()
+		~Program()
 		{
 
 		}
@@ -29,7 +29,7 @@ namespace onodrim::data
 			}
 		}
 
-		inline void AttachShader(GLSLShader& shader)
+		inline void AttachShader(Shader& shader)
 		{
 			glAttachShader(m_ProgramAddr, shader.GetShaderAddr());
 		}

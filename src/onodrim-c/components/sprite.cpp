@@ -5,7 +5,7 @@
 #else
 #include <GL\glew.h>
 #endif
-#include "../system/render/openGLSystem.h"
+#include "../system/render/render-system.h"
 #include "../system/systemManager.h"
 namespace onodrim
 {
@@ -13,13 +13,8 @@ namespace onodrim
 	{
 		X = 0;
 		Y = 0;
-		static const GLfloat matrix[9] = {
-			.5f,0,0,
-			0,.5f,0,
-			0,0,1
-		};
 		
-		auto system = system::SystemManager::GetInstance()->GetSystem<system::render::OpenGLSystem>();
+		auto system = system::SystemManager::GetInstance()->GetSystem<system::render::RenderSystem>();
 		vertLocation = glGetAttribLocation(system->GetProgram()->GetAddress(), "vertex");
 		matrixLocation = glGetAttribLocation(system->GetProgram()->GetAddress(), "matrix");
 		

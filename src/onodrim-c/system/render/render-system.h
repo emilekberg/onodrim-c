@@ -3,7 +3,8 @@
 #include "../tickSystem.h"
 #include "../../components/renderComponent.h"
 #include "../../utils/time.h"
-#include "../../data/glslProgram.h"
+#include "../../shaders/program.h"
+#include "./spritebatch.h"
 // #include "./opengl/sprite-batch.h"
 #ifdef __EMSCRIPTEN__
 	#include <emscripten.h>
@@ -19,11 +20,11 @@
 #include <string>
 #include <iostream>
 namespace onodrim::system::render {
-	class OpenGLSystem : public TickSystem
+	class RenderSystem : public TickSystem
 	{
 	public:
-		OpenGLSystem();
-		~OpenGLSystem();
+		RenderSystem();
+		~RenderSystem();
 
 		virtual inline bool CanProcessComponent(Component* component)
 		{
@@ -48,24 +49,20 @@ namespace onodrim::system::render {
 		void CheckError();
 
 
-		inline std::shared_ptr<data::GLSLProgram> GetProgram()
+		inline std::shared_ptr<shaders::Program> GetProgram()
 		{
-			return m_Program;
+			return m_Spritebatch->GetProgram();
 		}
 	protected:
 		bool Resize();
 		void UpdateViewMatrix();
 
 	private:
-		// std::unique_ptr<data::GLSLProgram> m_Program;
-		std::unique_ptr<data::GLSLShader> m_Frag;
-		std::unique_ptr<data::GLSLShader> m_Vert;
-		std::shared_ptr<data::GLSLProgram> m_Program;
+		std::shared_ptr<Spritebatch> m_Spritebatch;
 		std::vector<RenderComponent*> m_Components;
 		int m_Width;
 		int m_Height;
 		GLFWwindow* m_pWindow;
-		// std::shared_ptr<opengl::SpriteBatch> m_SpriteBatch;
 	};
 
 

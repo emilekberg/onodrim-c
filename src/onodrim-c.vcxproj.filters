@@ -36,9 +36,6 @@
     <ClCompile Include="onodrim-c\entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="onodrim-c\system\render\openGLSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="onodrim-c\system\systemManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -46,6 +43,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="onodrim-c\JSON.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="onodrim-c\system\render\spritebatch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="onodrim-c\system\render\render-system.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -98,9 +101,6 @@
     <ClInclude Include="onodrim-c\system\fixedUpdateSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="onodrim-c\system\render\openGLSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="onodrim-c\system\systemManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -125,15 +125,6 @@
     <ClInclude Include="onodrim-c\JSON.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="onodrim-c\data\gl-texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="onodrim-c\data\glslShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="onodrim-c\data\glslProgram.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="onodrim-c\math\rect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -141,6 +132,30 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="onodrim-c\math\vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="onodrim-c\primitives\quad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="onodrim-c\primitives\base-shape.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="onodrim-c\system\render\spritebatch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="onodrim-c\shaders\sprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="onodrim-c\data\texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="onodrim-c\shaders\program.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="onodrim-c\shaders\shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="onodrim-c\system\render\render-system.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -6,18 +6,18 @@
 #include <GLES3/gl3.h>
 #endif
 #include "../utils/logger.h"
-namespace onodrim::data
+namespace onodrim::shaders
 {
-	class GLSLShader
+	class Shader
 	{
 	public:
-		GLSLShader(GLuint shaderType)
+		Shader(GLuint shaderType)
 		{
 			m_ShaderAddr = glCreateShader(shaderType);
 			m_ShaderType = shaderType;
 			m_Path = "";
 		}
-		~GLSLShader()
+		~Shader()
 		{
 
 		}

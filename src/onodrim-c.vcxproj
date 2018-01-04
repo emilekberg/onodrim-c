@@ -28,12 +28,13 @@
     <ClCompile Include="onodrim-c\core.cpp" />
     <ClCompile Include="onodrim-c\entity.cpp" />
     <ClCompile Include="onodrim-c\JSON.cpp" />
-    <ClCompile Include="onodrim-c\system\render\openGLSystem.cpp" />
+    <ClCompile Include="onodrim-c\system\render\render-system.cpp" />
     <ClCompile Include="onodrim-c\system\systemManager.cpp" />
+    <ClCompile Include="onodrim-c\system\render\spritebatch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="onodrim-c\data\color.h" />
-    <ClInclude Include="onodrim-c\data\gl-texture.h" />
+    <ClInclude Include="onodrim-c\data\texture.h" />
     <ClInclude Include="onodrim-c\JSON.h" />
     <ClInclude Include="onodrim-c\fileloader.h" />
     <ClInclude Include="onodrim-c\components\component.h" />
@@ -44,9 +45,9 @@
     <ClInclude Include="onodrim-c\components\transform2d.h" />
     <ClInclude Include="onodrim-c\components\updateComponent.h" />
     <ClInclude Include="onodrim-c\core.h" />
-    <ClInclude Include="onodrim-c\data\glslProgram.h" />
+    <ClInclude Include="onodrim-c\shaders\program.h" />
     <ClInclude Include="onodrim-c\data\renderState.h" />
-    <ClInclude Include="onodrim-c\data\glslShader.h" />
+    <ClInclude Include="onodrim-c\shaders\shader.h" />
     <ClInclude Include="onodrim-c\Entity.h" />
     <ClInclude Include="onodrim-c\math\matrix3.h" />
     <ClInclude Include="onodrim-c\math\random.h" />
@@ -55,7 +56,7 @@
     <ClInclude Include="onodrim-c\math\vector2.h" />
     <ClInclude Include="onodrim-c\system\baseSystem.h" />
     <ClInclude Include="onodrim-c\system\fixedUpdateSystem.h" />
-    <ClInclude Include="onodrim-c\system\render\openGLSystem.h" />
+    <ClInclude Include="onodrim-c\system\render\render-system.h" />
     <ClInclude Include="onodrim-c\system\systemManager.h" />
     <ClInclude Include="onodrim-c\system\tickSystem.h" />
     <ClInclude Include="onodrim-c\system\updateSystem.h" />
@@ -63,6 +64,10 @@
     <ClInclude Include="onodrim-c\system\update\updateSystem.h" />
     <ClInclude Include="onodrim-c\utils\logger.h" />
     <ClInclude Include="onodrim-c\utils\time.h" />
+    <ClInclude Include="onodrim-c\primitives\base-shape.h" />
+    <ClInclude Include="onodrim-c\primitives\quad.h" />
+    <ClInclude Include="onodrim-c\system\render\spritebatch.h" />
+    <ClInclude Include="onodrim-c\shaders\sprite.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

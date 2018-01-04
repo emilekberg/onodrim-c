@@ -7,7 +7,7 @@
 #include "./system/systemManager.h"
 #include "./system/update/fixedUpdateSystem.h"
 #include "./system/update/updateSystem.h"
-#include "./system/render/openGLSystem.h"
+#include "./system/render/render-system.h"
 #ifdef __EMSCRIPTEN__
 	#include <emscripten.h>
 #endif
@@ -17,7 +17,7 @@ namespace onodrim {
 		LOG_INFO("Core created.");
 		system::SystemManager::GetInstance()->AddSystem(new system::update::FixedUpdateSystem());
 		system::SystemManager::GetInstance()->AddSystem(new system::update::UpdateSystem());
-		system::SystemManager::GetInstance()->AddSystem(new system::render::OpenGLSystem());
+		system::SystemManager::GetInstance()->AddSystem(new system::render::RenderSystem());
 	}
 
 
