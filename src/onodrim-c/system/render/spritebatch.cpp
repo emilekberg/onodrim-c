@@ -6,6 +6,7 @@ namespace onodrim::system::render
 {
 	Spritebatch::Spritebatch()
 	{
+		m_Size = 2000;
 		InitShaders();
 	}
 

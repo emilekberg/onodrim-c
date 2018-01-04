@@ -21,6 +21,7 @@ namespace onodrim::system::render
 		virtual void InitShaders();
 		
 	private:
+		int m_Size;
 		Quad m_quad;
 		std::unique_ptr<shaders::Shader> m_Frag;
 		std::unique_ptr<shaders::Shader> m_Vert;
