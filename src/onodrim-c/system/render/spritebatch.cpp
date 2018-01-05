@@ -46,8 +46,12 @@ namespace onodrim::system::render
 	void Spritebatch::InitVertexAttributes()
 	{
 		vertLocation = glGetAttribLocation(m_Program->GetAddress(), "vertex");
-		matrixLocation = glGetAttribLocation(m_Program->GetAddress(), "matrix");
 
+
+		m_InstanceAttributes.push_back(InstanceAttribute<GLfloat>(glGetAttribLocation(m_Program->GetAddress(), "in_matrix"), 3, GL_FALSE, 3, 1));
+		m_InstanceAttributes.push_back(InstanceAttribute<GLfloat>(glGetAttribLocation(m_Program->GetAddress(), "in_color"), 4, GL_FALSE, 1, 1));
+
+		// InstanceAttribute<GLfloat> matrixAttribute(matrixLocation, 3, false, 3, 1);
 
 		glGenVertexArrays(1, &vao);
 
@@ -70,7 +74,27 @@ namespace onodrim::system::render
 			glBindBuffer(GL_ARRAY_BUFFER, m_GLBuffers[BUFFER_INSTANCE]);
 			glBufferData(GL_ARRAY_BUFFER, SIZE * 3 * 3 * sizeof(float), m_InstanceDataArray, GL_STATIC_DRAW);
 
-			glEnableVertexAttribArray(matrixLocation);
+			int offset = 0;
+			int currentOffset = 0;
+			int totalStride = 0;
+			
+			for (InstanceAttribute<GLfloat>& value : m_InstanceAttributes)
+			{
+				totalStride += value.Stride;
+			}
+			for (InstanceAttribute<GLfloat>& value : m_InstanceAttributes)
+			{
+				for (int i = 0; i < value.Length; ++i)
+				{
+					currentOffset = offset + (value.Offset * i);
+					glEnableVertexAttribArray(value.Index + i);
+					glVertexAttribPointer(value.Index + i, value.Size, GL_FLOAT, value.Normalized, totalStride, (const void*)currentOffset);
+					glVertexAttribDivisor(value.Index + i, value.Divisor);
+				}
+				offset += value.Stride;
+			}
+
+			/*glEnableVertexAttribArray(matrixLocation);
 			glEnableVertexAttribArray(matrixLocation + 1);
 			glEnableVertexAttribArray(matrixLocation + 2);
 			glVertexAttribPointer(matrixLocation, 3, GL_FLOAT, GL_FALSE, 3 * 3 * sizeof(GL_FLOAT), (void*)(3 * sizeof(GL_FLOAT) * 0));
@@ -78,7 +102,7 @@ namespace onodrim::system::render
 			glVertexAttribPointer(matrixLocation + 2, 3, GL_FLOAT, GL_FALSE, 3 * 3 * sizeof(GL_FLOAT), (void*)(3 * sizeof(GL_FLOAT) * 2));
 			glVertexAttribDivisor(matrixLocation, 1);
 			glVertexAttribDivisor(matrixLocation + 1, 1);
-			glVertexAttribDivisor(matrixLocation + 2, 1);
+			glVertexAttribDivisor(matrixLocation + 2, 1);*/
 		}
 		glBindVertexArray(NULL);
 	}
@@ -95,16 +119,18 @@ namespace onodrim::system::render
 		
 	}
 
-	void Spritebatch::Render(Matrix3& matrix)
+	void Spritebatch::Render(Matrix3& matrix, Color& color)
 	{
-		memcpy(m_InstanceDataArray + (m_Count * 9), matrix.GetArray(), 9 * sizeof(float));
+		static const int SIZE_PER_INSTANCE = 9 + 4;
+		memcpy(m_InstanceDataArray + (m_Count * SIZE_PER_INSTANCE), matrix.GetArray(), 9 * sizeof(float));
+		memcpy(m_InstanceDataArray + (m_Count * SIZE_PER_INSTANCE) + 9, color.values, 4 * sizeof(float));
 		m_Count++;
 	}
 
 	void Spritebatch::Flush()
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, m_GLBuffers[BUFFER_INSTANCE]);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, m_Count * 3 * 3 * sizeof(GL_FLOAT), m_InstanceDataArray);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, m_Count * ((3 * 3) + 4) * sizeof(GL_FLOAT), m_InstanceDataArray);
 		glBindVertexArray(vao);
 		//draw 3 vertices as triangles
 		glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, NULL, m_Count);

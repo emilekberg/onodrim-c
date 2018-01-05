@@ -52,7 +52,21 @@ public:
 	MoveComponent(onodrim::Entity* pEntity, int direction) : onodrim::FixedUpdateComponent(pEntity)
 	{
 		m_pTransform = m_pEntity->GetComponent<onodrim::Transform2d>();
+		m_pSprite = m_pEntity->GetComponent<onodrim::Sprite>();
 		m_Direction = direction;
+
+
+		switch (m_Direction)
+		{
+		case 0:
+			m_pSprite->Color.SetHex(0xff0000);
+			m_pSprite->Color.SetAlpha(0.5f);
+			break;
+		case 1:
+			m_pSprite->Color.SetHex(0xff00ff);
+			m_pSprite->Color.SetAlpha(0.5f);
+			break;
+		}
 	}
 	virtual ~MoveComponent() {};
 
@@ -72,6 +86,7 @@ public:
 
 private:
 	onodrim::Transform2d* m_pTransform;
+	onodrim::Sprite* m_pSprite;
 	int m_Direction;
 };
 
@@ -111,14 +126,13 @@ extern "C"
 		core = new onodrim::Core();
 		entity = new onodrim::Entity();
 		entity->AddComponent(new onodrim::Transform2d(entity));
-		entity->AddComponent(new MoveComponent(entity, 0));
 		entity->AddComponent(new onodrim::Sprite(entity));
+		entity->AddComponent(new MoveComponent(entity, 0));
 
 		entity = new onodrim::Entity();
 		entity->AddComponent(new onodrim::Transform2d(entity));
-		entity->AddComponent(new MoveComponent(entity, 1));
 		entity->AddComponent(new onodrim::Sprite(entity));
-		
+		entity->AddComponent(new MoveComponent(entity, 1));
 	}
 
 	void EMSCRIPTEN_KEEPALIVE gameloop()
@@ -145,13 +159,14 @@ int main()
 	core = new onodrim::Core();
 	entity = new onodrim::Entity();
 	entity->AddComponent(new onodrim::Transform2d(entity));
-	entity->AddComponent(new MoveComponent(entity, 0));
 	entity->AddComponent(new onodrim::Sprite(entity));
+	entity->AddComponent(new MoveComponent(entity, 0));
 
 	entity = new onodrim::Entity();
 	entity->AddComponent(new onodrim::Transform2d(entity));
-	entity->AddComponent(new MoveComponent(entity, 1));
 	entity->AddComponent(new onodrim::Sprite(entity));
+	entity->AddComponent(new MoveComponent(entity, 1));
+
 	core->Start();
 	return 0;
 }

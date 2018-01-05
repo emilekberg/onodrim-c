@@ -8,38 +8,46 @@ namespace onodrim::shaders::sprite
 			#version 430 core
 			in vec2 vertex;
 
-			in mat3 matrix;
+			in mat3 in_matrix;
+			in vec4 in_color;
+			out vec4 v_color;
 			void main(void)
 			{
-				vec3 pos = matrix * vec3(vertex, 1);
+				vec3 pos = in_matrix * vec3(vertex, 1);
 				gl_Position = vec4(pos, 1);
+				v_color = in_color;
 			}
 		)";
 	static const std::string frag = R"(
 			#version 430 core
+			in vec4 v_color;
 			out vec4 color;
 			void main(void)
 			{
-				color = vec4(0.0, 1.0, 0.0, 1.0);
+				color = v_color;
 			}
 		)";
 #else
 	static const std::string vert = R"(#version 300 es
 			in vec2 vertex;
-			in mat3 matrix;
+			in mat3 in_matrix;
+			in vec4 in_color;
+			out vec4 v_color;
 			void main(void)
 			{
-				vec3 pos = matrix * vec3(vertex, 1);
+				vec3 pos = in_matrix * vec3(vertex, 1);
 				gl_Position = vec4(pos, 1);
+				v_color = in_color;
 			}
 		)";
 
 	static const std::string frag = R"(#version 300 es
 			precision mediump float;
+			in vec4 v_color;
 			out vec4 color;
 			void main(void)
 			{
-				color = vec4(0.0, 1.0, 0.0, 1.0);
+				color = v_color;
 			}
 		)";
 #endif

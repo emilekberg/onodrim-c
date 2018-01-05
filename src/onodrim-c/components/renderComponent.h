@@ -13,6 +13,7 @@ namespace onodrim {
 		RenderComponent(Entity* pEntity) : FixedUpdateComponent(pEntity)
 		{
 			m_pTransform = m_pEntity->GetComponent<Transform2d>();
+			m_Alpha = 1.0f;
 		};
 		virtual ~RenderComponent() {};
 
@@ -63,7 +64,7 @@ namespace onodrim {
 		virtual void InterpolateRenderMatrix(float delta);
 
 		
-
+		Color Color;
 	protected:
 		bool m_ZChanged;
 		bool m_Visible;
@@ -73,7 +74,7 @@ namespace onodrim {
 		data::RenderState m_PreviousRenderState;
 		Matrix3 m_RenderMatrix;
 		Transform2d* m_pTransform;
-		Color m_Color;
+		
 	};
 
 

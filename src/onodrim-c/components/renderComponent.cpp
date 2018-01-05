@@ -13,7 +13,7 @@ namespace onodrim
 		UpdateTransform();
 		m_RenderState.WasDirty = m_pTransform->WasDirty;
 		m_RenderState.Alpha = m_Alpha;
-		m_Color.A = m_Alpha;
+		Color.SetAlpha(m_Alpha);
 	}
 
 	void RenderComponent::InterpolateRenderMatrix(float delta)

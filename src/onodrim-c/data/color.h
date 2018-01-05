@@ -7,12 +7,12 @@ namespace onodrim
 		Color()
 		{
 			SetHex(0xFFFFFF);
-			A = 1;
+			SetAlpha(1);
 		}
 		Color(int hex)
 		{
 			SetHex(hex);
-			A = 1;
+			SetAlpha(1);
 		}
 		Color(float r, float g, float b, float a = 1.0f)
 		{
@@ -25,21 +25,22 @@ namespace onodrim
 
 		inline void SetHex(int hex)
 		{
-			R = ((hex >> 16) & 0xFF) / 255.f;
-			G = ((hex >> 8) & 0xFF) / 255.f;
-			B = ((hex) & 0xFF) / 255.f;
+			values[0] = ((hex >> 16) & 0xFF) / 255.f;
+			values[1] = ((hex >> 8) & 0xFF) / 255.f;
+			values[2] = ((hex) & 0xFF) / 255.f;
 		}
-		inline void SetRGBA(float r, float g, float b, float a)
+		inline void SetRGBA(float r, float g, float b, float a = 1.0f)
 		{
-			R = r;
-			G = g;
-			B = b;
-			A = a;
+			values[0] = r;
+			values[1] = g;
+			values[2] = b;
+			values[3] = a;
+		}
+		inline void SetAlpha(float a)
+		{
+			values[3] = a;
 		}
 
-		float R;
-		float G;
-		float B;
-		float A;
+		float values[4];
 	};
 }
