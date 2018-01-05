@@ -8,9 +8,9 @@ namespace onodrim::system::update {
 	public:
 		FixedUpdateSystem()
 		{
-			m_UpdateRate = 1.f / 30.f;
-			m_CurrentUpdateTime = time::now();
-			m_NextUpdateTime = m_CurrentUpdateTime + m_UpdateRate;
+			UpdateRate = 1.f / 30.f;
+			CurrentUpdateTime = time::now();
+			NextUpdateTime = CurrentUpdateTime + UpdateRate;
 		}
 		~FixedUpdateSystem()
 		{
@@ -30,10 +30,10 @@ namespace onodrim::system::update {
 		inline virtual bool Tick()
 		{
 			
-			time::setFixedUpdateTimeStep(m_UpdateRate);
+			time::setFixedUpdateTimeStep(UpdateRate);
 			int numberOfUpdates = 0;
 			float now = time::now();
-			while (now > m_NextUpdateTime)
+			while (now > NextUpdateTime)
 			{
 				for (auto it = m_Components.begin(); it != m_Components.end(); it++)
 				{
@@ -43,18 +43,20 @@ namespace onodrim::system::update {
 					}
 					(*it)->FixedUpdate(numberOfUpdates++ > 0);
 				}
-				m_CurrentUpdateTime = m_NextUpdateTime;
-				m_NextUpdateTime += m_UpdateRate;
+				CurrentUpdateTime = NextUpdateTime;
+				NextUpdateTime += UpdateRate;
 				now = time::now();
 			}
 			return true;
 		}
 
+		float UpdateRate;
+		float CurrentUpdateTime;
+		float NextUpdateTime;
+
 	private:
 		std::vector<FixedUpdateComponent*> m_Components;
-		float m_UpdateRate;
-		float m_CurrentUpdateTime;
-		float m_NextUpdateTime;
+		
 	};
 
 

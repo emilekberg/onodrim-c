@@ -60,6 +60,8 @@ namespace onodrim {
 			return m_Visible && m_Alpha > 0;
 		}
 
+		virtual void InterpolateRenderMatrix(float delta);
+
 		
 
 	protected:
@@ -69,6 +71,7 @@ namespace onodrim {
 		float m_Depth;
 		data::RenderState m_RenderState;
 		data::RenderState m_PreviousRenderState;
+		Matrix3 m_RenderMatrix;
 		Transform2d* m_pTransform;
 		Color m_Color;
 	};

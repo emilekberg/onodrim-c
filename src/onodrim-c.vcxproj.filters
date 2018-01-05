@@ -158,5 +158,8 @@
     <ClInclude Include="onodrim-c\system\render\render-system.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="onodrim-c\math\math.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

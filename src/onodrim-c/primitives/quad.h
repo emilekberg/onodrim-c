@@ -12,12 +12,12 @@ public:
 		1, 1,
 		1, -1
 	};
-	const unsigned short Indices[6]{
+	const unsigned char Indices[6]{
 		0, 1, 2,
 		0, 2, 3
 	};
 
-	const unsigned short TextureCoordinates[8]{
+	const unsigned char TextureCoordinates[8]{
 		0, 0,
 		0, 1,
 		1, 1,

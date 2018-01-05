@@ -55,4 +55,11 @@ namespace onodrim
 		}
 		AddChild(transform);
 	}
+
+	void Transform2d::Translate(float x, float y)
+	{
+		SetDirty();
+		m_Position.X += x;
+		m_Position.Y += y;
+	}
 }

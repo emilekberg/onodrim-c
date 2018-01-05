@@ -3,6 +3,7 @@
 #include "../../utils/logger.h"
 #include "../../shaders/sprite.h"
 #include <stdio.h>
+#include "../systemManager.h"
 namespace onodrim::system::render
 {
 	RenderSystem::RenderSystem()
@@ -10,7 +11,7 @@ namespace onodrim::system::render
 		m_Width = 800;
 		m_Height = 600;
 		m_pWindow = NULL;
-
+		m_FixedUpdateSystem = SystemManager::GetInstance()->GetSystem<onodrim::system::update::FixedUpdateSystem>();
 		InitGL();
 	}
 	RenderSystem::~RenderSystem()
@@ -96,10 +97,7 @@ namespace onodrim::system::render
 	bool RenderSystem::Render()
 	{
 		// utils::logLine("OpenGLSystem::Render()");
-		float renderDelta = 0.f;
-		// TODO: see if this can be here
-		// const delta = (Time.now()-this.fixedUpdateSystem.currentUpdateTime)/this.fixedUpdateSystem.updateRate;
-
+		float renderDelta = (time::now() - m_FixedUpdateSystem->CurrentUpdateTime) / m_FixedUpdateSystem->UpdateRate;
 		if(Resize() || false)	// false is Camerasystem.MAIN.isDirty
 		{
 			// TODO: Implement

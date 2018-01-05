@@ -45,6 +45,37 @@ using namespace onodrim::utils;
 onodrim::Entity* entity;
 onodrim::Sprite* sprite;
 onodrim::Core* core;
+
+class MoveComponent : public onodrim::FixedUpdateComponent
+{
+public:
+	MoveComponent(onodrim::Entity* pEntity, int direction) : onodrim::FixedUpdateComponent(pEntity)
+	{
+		m_pTransform = m_pEntity->GetComponent<onodrim::Transform2d>();
+		m_Direction = direction;
+	}
+	virtual ~MoveComponent() {};
+
+	virtual void FixedUpdate(bool compensate)
+	{
+		switch (m_Direction)
+		{
+		case 0:
+			m_pTransform->Translate(0.01f, 0);
+			break;
+		case 1:
+			m_pTransform->Translate(0, 0.01f);
+			break;
+		}
+
+	}
+
+private:
+	onodrim::Transform2d* m_pTransform;
+	int m_Direction;
+};
+
+
 #ifdef __EMSCRIPTEN__
 
 
@@ -80,8 +111,13 @@ extern "C"
 		core = new onodrim::Core();
 		entity = new onodrim::Entity();
 		entity->AddComponent(new onodrim::Transform2d(entity));
-		sprite = new onodrim::Sprite(entity);
-		entity->AddComponent(sprite);
+		entity->AddComponent(new MoveComponent(entity, 0));
+		entity->AddComponent(new onodrim::Sprite(entity));
+
+		entity = new onodrim::Entity();
+		entity->AddComponent(new onodrim::Transform2d(entity));
+		entity->AddComponent(new MoveComponent(entity, 1));
+		entity->AddComponent(new onodrim::Sprite(entity));
 		
 	}
 
@@ -106,39 +142,16 @@ extern "C"
 #else
 int main()
 {
-	std::string buffer =
-R"({
-	str: "hello",
-	int: 1,
-	float: 2.5
-})";
-	JSON j(buffer);
-
-	onodrim::Vector<float, 3> first
-	{
-		0.0f, 1.0f, 0.0f
-	};
-	onodrim::Vector<float, 3> second
-	{
-		0.0f, 1.2f, 0.3f
-	};
-
-	onodrim::Vector<float, 3> third = first + second;
-
-
-	first = {
-		1.0f, 1.0f, 1.0f
-	};
-
-
-
-	
-
 	core = new onodrim::Core();
 	entity = new onodrim::Entity();
 	entity->AddComponent(new onodrim::Transform2d(entity));
-	sprite = new onodrim::Sprite(entity);
-	entity->AddComponent(sprite);
+	entity->AddComponent(new MoveComponent(entity, 0));
+	entity->AddComponent(new onodrim::Sprite(entity));
+
+	entity = new onodrim::Entity();
+	entity->AddComponent(new onodrim::Transform2d(entity));
+	entity->AddComponent(new MoveComponent(entity, 1));
+	entity->AddComponent(new onodrim::Sprite(entity));
 	core->Start();
 	return 0;
 }

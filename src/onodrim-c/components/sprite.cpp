@@ -7,48 +7,13 @@
 #endif
 #include "../system/render/render-system.h"
 #include "../system/systemManager.h"
+#include "../primitives/quad.h"
 namespace onodrim
 {
 	Sprite::Sprite(Entity* pEntity) : RenderComponent(pEntity)
 	{
 		X = 0;
 		Y = 0;
-		
-		auto system = system::SystemManager::GetInstance()->GetSystem<system::render::RenderSystem>();
-		vertLocation = glGetAttribLocation(system->GetProgram()->GetAddress(), "vertex");
-		matrixLocation = glGetAttribLocation(system->GetProgram()->GetAddress(), "matrix");
-		
-		glGenBuffers(1, &vertex_buffer);
-		glGenBuffers(1, &matrix_buffer);
-		glGenBuffers(1, &index_buffer);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, 2 * 3 * sizeof(GL_UNSIGNED_BYTE), indices, GL_STATIC_DRAW);
-
-		glGenVertexArrays(1, &vao);
-		glBindVertexArray(vao);
-		{
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer);
-			
-			
-			glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-			glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(GL_FLOAT), vertices, GL_STATIC_DRAW);
-			glEnableVertexAttribArray(vertLocation);
-			glVertexAttribPointer(vertLocation, 2, GL_FLOAT, GL_FALSE, 0, NULL);
-
-			glBindBuffer(GL_ARRAY_BUFFER, matrix_buffer);
-			glBufferData(GL_ARRAY_BUFFER, 36, m_pTransform->WorldMatrix.GetArray(), GL_STATIC_DRAW);
-
-			glEnableVertexAttribArray(matrixLocation);
-			glEnableVertexAttribArray(matrixLocation + 1);
-			glEnableVertexAttribArray(matrixLocation + 2);
-			glVertexAttribPointer(matrixLocation, 3, GL_FLOAT, GL_FALSE, 36, (void*)(12 * 0));
-			glVertexAttribPointer(matrixLocation + 1, 3, GL_FLOAT, GL_FALSE, 36, (void*)(12 * 1));
-			glVertexAttribPointer(matrixLocation + 2, 3, GL_FLOAT, GL_FALSE, 36, (void*)(12 * 2));
-			glVertexAttribDivisor(matrixLocation, 1);
-			glVertexAttribDivisor(matrixLocation+1, 1);
-			glVertexAttribDivisor(matrixLocation+2, 1);
-		}
-		glBindVertexArray(NULL);
 	}
 
 	Sprite::~Sprite()
@@ -66,17 +31,12 @@ namespace onodrim
 				.Multiply(m_pTransform->WorldMatrix)
 				.Translate(X, Y);
 		}
-		m_pTransform->WorldMatrix.Translate(0.01f, 0);
-		
-		glBindBuffer(GL_ARRAY_BUFFER, matrix_buffer);
-		glBufferData(GL_ARRAY_BUFFER, 36, m_pTransform->WorldMatrix.GetArray(), GL_STATIC_DRAW);
 	}
 
 	void Sprite::Render(float delta)
 	{
-		glBindVertexArray(vao);
-		//draw 3 vertices as triangles
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, NULL);
-		glBindVertexArray(NULL);
+		auto spritebatch = system::SystemManager::GetInstance()->GetSystem<system::render::RenderSystem>()->GetSpriteBatch();
+		InterpolateRenderMatrix(delta);
+		spritebatch->Render(m_RenderMatrix);
 	}
 }

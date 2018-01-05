@@ -15,6 +15,8 @@ namespace onodrim
 		void SetDirty();
 		void AddChildEntity(Entity* entity);
 
+		void Translate(float x, float y);
+
 		bool WasDirty;
 		Matrix3 WorldMatrix;
 	protected:

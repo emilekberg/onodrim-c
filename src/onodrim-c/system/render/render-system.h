@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include "../update/fixedUpdateSystem.h"
 #include "../tickSystem.h"
 #include "../../components/renderComponent.h"
 #include "../../utils/time.h"
@@ -53,11 +54,16 @@ namespace onodrim::system::render {
 		{
 			return m_Spritebatch->GetProgram();
 		}
+		inline std::shared_ptr<Spritebatch> GetSpriteBatch()
+		{
+			return m_Spritebatch;
+		}
 	protected:
 		bool Resize();
 		void UpdateViewMatrix();
 
 	private:
+		onodrim::system::update::FixedUpdateSystem* m_FixedUpdateSystem;
 		std::shared_ptr<Spritebatch> m_Spritebatch;
 		std::vector<RenderComponent*> m_Components;
 		int m_Width;

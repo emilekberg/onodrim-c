@@ -45,6 +45,7 @@
     <ClInclude Include="onodrim-c\components\transform2d.h" />
     <ClInclude Include="onodrim-c\components\updateComponent.h" />
     <ClInclude Include="onodrim-c\core.h" />
+    <ClInclude Include="onodrim-c\math\math.h" />
     <ClInclude Include="onodrim-c\shaders\program.h" />
     <ClInclude Include="onodrim-c\data\renderState.h" />
     <ClInclude Include="onodrim-c\shaders\shader.h" />

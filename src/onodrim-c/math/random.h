@@ -23,7 +23,6 @@ namespace onodrim::random {
 		return min + ((static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * (max-min));
 	}
 
-
 	void Seed(int number)
 	{
 		srand(number);

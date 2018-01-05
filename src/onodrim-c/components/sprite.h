@@ -22,26 +22,6 @@ namespace onodrim
 		void Render(float delta);
 
 	protected:
-		const GLfloat vertices[8] = {
-			-1, -1,
-			-1, 1,
-			1, 1,
-			1, -1
-		};
-		const GLubyte indices[6] {
-			0, 1, 2,
-			0, 2, 3
-		};
-
-		GLuint vertex_buffer = NULL;
-		GLuint index_buffer = NULL;
-		GLuint matrix_buffer = NULL;
-
-
-		GLint vertLocation = NULL;
-		GLint matrixLocation = NULL;
-		GLuint vao;
-
 		float m_Width;
 		float m_Height;
 
