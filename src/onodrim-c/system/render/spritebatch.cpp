@@ -32,7 +32,7 @@ namespace onodrim::system::render
 		m_Program->AttachShader(*m_Frag);
 
 		m_Program->Link();
-
+		m_Program->Use();
 		// TODO: fixed projection matrix.
 		LOG_INFO("successfully initiated shaders");
 	}
@@ -45,6 +45,17 @@ namespace onodrim::system::render
 
 	void Spritebatch::InitVertexAttributes()
 	{
+		// Hack because camera might not exist here yet. need to fix this :).
+		GLint projectionLocation = glGetUniformLocation(m_Program->GetAddress(), "u_projection");
+		if (projectionLocation != -1) {
+			static const GLfloat data[9] = {
+				2.0f / 800.0f, 0, 0,
+				0, -2.0f / 600.0f, 0,
+				-1, 1, 1,
+			};
+			glUniformMatrix3fv(projectionLocation, 1, GL_FALSE, data);
+		}
+
 		vertLocation = glGetAttribLocation(m_Program->GetAddress(), "vertex");
 
 

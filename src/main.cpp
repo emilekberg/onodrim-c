@@ -61,6 +61,7 @@ public:
 		case 0:
 			m_pSprite->Color.SetHex(0xff0000);
 			m_pSprite->Color.SetAlpha(0.5f);
+			m_pTransform->SetPosition(200, 200);
 			break;
 		case 1:
 			m_pSprite->Color.SetHex(0xff00ff);
@@ -75,10 +76,10 @@ public:
 		switch (m_Direction)
 		{
 		case 0:
-			m_pTransform->Translate(0.01f, 0);
+			m_pTransform->Translate(1.f, 0);
 			break;
 		case 1:
-			m_pTransform->Translate(0, 0.01f);
+			m_pTransform->Translate(0, 1.f);
 			break;
 		}
 
@@ -92,10 +93,6 @@ private:
 
 
 #ifdef __EMSCRIPTEN__
-
-
-
-
 extern "C"
 {
 	void EMSCRIPTEN_KEEPALIVE init(int width, int height)

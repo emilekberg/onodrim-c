@@ -27,7 +27,7 @@ namespace onodrim
 		{
 			m_RenderState.Matrix
 				.Identity()
-				.Scale(1, 1)
+				.Scale(100, 100)
 				.Multiply(m_pTransform->WorldMatrix)
 				.Translate(X, Y);
 		}

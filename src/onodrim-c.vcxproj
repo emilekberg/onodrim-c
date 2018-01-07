@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="onodrim-c\components\camera2d.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="onodrim-c\components\component.cpp" />
     <ClCompile Include="onodrim-c\components\renderComponent.cpp" />
@@ -33,6 +34,7 @@
     <ClCompile Include="onodrim-c\system\render\spritebatch.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="onodrim-c\components\camera2d.h" />
     <ClInclude Include="onodrim-c\data\color.h" />
     <ClInclude Include="onodrim-c\data\texture.h" />
     <ClInclude Include="onodrim-c\JSON.h" />
@@ -46,10 +48,11 @@
     <ClInclude Include="onodrim-c\components\updateComponent.h" />
     <ClInclude Include="onodrim-c\core.h" />
     <ClInclude Include="onodrim-c\math\math.h" />
+    <ClInclude Include="onodrim-c\math\matrix.h" />
     <ClInclude Include="onodrim-c\shaders\program.h" />
     <ClInclude Include="onodrim-c\data\renderState.h" />
     <ClInclude Include="onodrim-c\shaders\shader.h" />
-    <ClInclude Include="onodrim-c\Entity.h" />
+    <ClInclude Include="onodrim-c\entity.h" />
     <ClInclude Include="onodrim-c\math\matrix3.h" />
     <ClInclude Include="onodrim-c\math\random.h" />
     <ClInclude Include="onodrim-c\math\rect.h" />

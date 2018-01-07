@@ -9,7 +9,7 @@ namespace onodrim {
 	public:
 		Vector()
 		{
-
+			memset(&m_Values, 0, sizeof(T)*SIZE);
 		}
 		Vector(const std::initializer_list<T> list)
 		{
@@ -29,7 +29,7 @@ namespace onodrim {
 			T sum = 0;
 			for (int i = 0; i < SIZE; ++i)
 			{
-				sum += m_Data[i] * m_Data[i];
+				sum += m_Values[i] * m_Values[i];
 			}
 			return sum;
 		}
@@ -39,19 +39,19 @@ namespace onodrim {
 		}
 
 	private:
-		T m_Data[SIZE];
+		T m_Values[SIZE];
 
 	public:
 		T& operator[](const int index)
 		{
-			return m_Data[index];
+			return m_Values[index];
 		}
 		Vector<T, SIZE> operator+(const Vector<T, SIZE>& toAdd)
 		{
 			Vector<T, SIZE> ret;
 			for (int i = 0; i < SIZE; ++i)
 			{
-				ret.m_Data[i] = m_Data[i] + toAdd.m_Data[i];
+				ret.m_Values[i] = m_Values[i] + toAdd.m_Values[i];
 			}
 			return ret;
 		}
@@ -60,7 +60,7 @@ namespace onodrim {
 			Vector<T, SIZE> ret;
 			for (int i = 0; i < SIZE; ++i)
 			{
-				ret[i] = m_Data[i] - toSubtract.m_Data[i];
+				ret[i] = m_Values[i] - toSubtract.m_Values[i];
 			}
 			return ret;
 		}
@@ -69,7 +69,7 @@ namespace onodrim {
 			Vector<T, SIZE> ret;
 			for (int i = 0; i < SIZE; ++i)
 			{
-				ret[i] = m_Data[i] * toSubtract.m_Data[i];
+				ret[i] = m_Values[i] * toSubtract.m_Values[i];
 			}
 			return ret;
 		}
@@ -87,7 +87,7 @@ namespace onodrim {
 			Vector<T, SIZE> ret;
 			for (int i = 0; i < SIZE; ++i)
 			{
-				ret[i] = m_Data[i] * factor;
+				ret[i] = m_Values[i] * factor;
 			}
 			return ret;
 		}
@@ -96,7 +96,7 @@ namespace onodrim {
 			Vector<T, SIZE> ret;
 			for (int i = 0; i < SIZE; ++i)
 			{
-				ret[i] = m_Data[i] / toDivide.m_Data[i];
+				ret[i] = m_Values[i] / toDivide.m_Values[i];
 			}
 			return ret;
 		}
@@ -114,7 +114,7 @@ namespace onodrim {
 			Vector<T, SIZE> ret;
 			for (int i = 0; i < SIZE; ++i)
 			{
-				ret[i] = m_Data[i] / divisor;
+				ret[i] = m_Values[i] / divisor;
 			}
 			return ret;
 		}
@@ -122,7 +122,7 @@ namespace onodrim {
 		{
 			for (int i = 0; i < SIZE; ++i)
 			{
-				m_Data[i] += toAdd.m_Data[i];
+				m_Values[i] += toAdd.m_Values[i];
 			}
 			return *this;
 		}
@@ -130,7 +130,7 @@ namespace onodrim {
 		{
 			for (int i = 0; i < SIZE; ++i)
 			{
-				m_Data[i] -= toSubtract.m_Data[i];
+				m_Values[i] -= toSubtract.m_Values[i];
 			}
 			return *this;
 		}
@@ -138,7 +138,7 @@ namespace onodrim {
 		{
 			for (int i = 0; i < SIZE; ++i)
 			{
-				m_Data[i] *= toMultiply.m_Data[i];
+				m_Values[i] *= toMultiply.m_Values[i];
 			}
 			return *this;
 		}
@@ -146,7 +146,7 @@ namespace onodrim {
 		{
 			for (int i = 0; i < SIZE; ++i)
 			{
-				m_Data[i] *= factor;
+				m_Values[i] *= factor;
 			}
 			return *this;
 		}
@@ -154,7 +154,7 @@ namespace onodrim {
 		{
 			for (int i = 0; i < SIZE; ++i)
 			{
-				m_Data[i] /= toDivide.m_Data[i];
+				m_Values[i] /= toDivide.m_Values[i];
 			}
 			return *this;
 		}
@@ -162,16 +162,13 @@ namespace onodrim {
 		{
 			for (int i = 0; i < SIZE; ++i)
 			{
-				m_Data[i] /= divisor;
+				m_Values[i] /= divisor;
 			}
 			return *this;
 		}
 		Vector<T, SIZE>& operator=(const Vector<T, SIZE>& toCopy)
 		{
-			for (int i = 0; i < SIZE; ++i)
-			{
-				m_Data[i] = toCopy.m_Data[i];
-			}
+			memcpy(&m_Values, toCopy.m_Values, sizeof(T) * SIZE);
 			return *this;
 		}
 		Vector<T, SIZE>& operator=(const std::initializer_list<T> list)
@@ -179,14 +176,14 @@ namespace onodrim {
 			int count = 0;
 			for (auto &value : list)
 			{
-				m_Data[count] = value;
+				m_Values[count] = value;
 				++count;
 			}
 			return *this;
 		}
 		bool operator==(const Vector<T, SIZE>& toCompare)
 		{
-			return memcmp(m_Data, toCompare.m_Data, sizeof(T) * SIZE) == 0;
+			return memcmp(&m_Values, toCompare.m_Values, sizeof(T) * SIZE) == 0;
 		}
 	};
 }

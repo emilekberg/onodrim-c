@@ -51,6 +51,9 @@
     <ClCompile Include="onodrim-c\system\render\render-system.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="onodrim-c\components\camera2d.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="onodrim-c\fileloader.h">
@@ -81,9 +84,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="onodrim-c\data\renderState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="onodrim-c\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="onodrim-c\math\matrix3.h">
@@ -159,6 +159,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="onodrim-c\math\math.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="onodrim-c\components\camera2d.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="onodrim-c\entity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="onodrim-c\math\matrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -41,6 +41,11 @@ namespace onodrim
 			values[3] = a;
 		}
 
+		float operator[](unsigned int index)
+		{
+			return values[index];
+		}
+
 		float values[4];
 	};
 }
