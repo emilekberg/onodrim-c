@@ -29,6 +29,7 @@
     <ClCompile Include="onodrim-c\core.cpp" />
     <ClCompile Include="onodrim-c\entity.cpp" />
     <ClCompile Include="onodrim-c\JSON.cpp" />
+    <ClCompile Include="onodrim-c\math\matrix4.h" />
     <ClCompile Include="onodrim-c\system\render\render-system.cpp" />
     <ClCompile Include="onodrim-c\system\systemManager.cpp" />
     <ClCompile Include="onodrim-c\system\render\spritebatch.cpp" />

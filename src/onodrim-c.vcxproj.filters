@@ -54,6 +54,9 @@
     <ClCompile Include="onodrim-c\components\camera2d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="onodrim-c\math\matrix4.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="onodrim-c\fileloader.h">

@@ -1,6 +1,8 @@
 #include "spritebatch.h"
 #include "../../shaders/sprite.h"
 #include "../../utils/logger.h"
+#include "../../math/matrix3.h"
+#include "../../math/matrix4.h"
 namespace onodrim::system::render
 {
 	Spritebatch::Spritebatch()
@@ -48,12 +50,17 @@ namespace onodrim::system::render
 		// Hack because camera might not exist here yet. need to fix this :).
 		GLint projectionLocation = glGetUniformLocation(m_Program->GetAddress(), "u_projection");
 		if (projectionLocation != -1) {
-			static const GLfloat data[9] = {
-				2.0f / 800.0f, 0, 0,
-				0, -2.0f / 600.0f, 0,
-				-1, 1, 1,
-			};
-			glUniformMatrix3fv(projectionLocation, 1, GL_FALSE, data);
+			float width = 800.0f;
+			float height = 600.0f;
+			float depth = 400.0f;
+			static Matrix4 mat4x4;
+			mat4x4.Identity()
+				.Scale(1.0f / width, 1.0f / height, 2.0f / depth)
+				.Scale(2, 2, 1)
+				.Translate(-1, -1, 0)
+				.Scale(1, -1, 1);
+			
+			glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, mat4x4.GetArray());
 		}
 
 		vertLocation = glGetAttribLocation(m_Program->GetAddress(), "vertex");

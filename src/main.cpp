@@ -76,10 +76,10 @@ public:
 		switch (m_Direction)
 		{
 		case 0:
-			m_pTransform->Translate(1.f, 0);
+			// m_pTransform->Translate(1.f, 0);
 			break;
 		case 1:
-			m_pTransform->Translate(0, 1.f);
+			// m_pTransform->Translate(0, 1.f);
 			break;
 		}
 
