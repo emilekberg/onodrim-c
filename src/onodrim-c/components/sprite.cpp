@@ -37,6 +37,6 @@ namespace onodrim
 	{
 		auto spritebatch = system::SystemManager::GetInstance()->GetSystem<system::render::RenderSystem>()->GetSpriteBatch();
 		InterpolateRenderMatrix(delta);
-		spritebatch->Render(m_RenderMatrix, Color);
+		spritebatch->Render(m_RenderMatrix, Color, m_Depth);
 	}
 }

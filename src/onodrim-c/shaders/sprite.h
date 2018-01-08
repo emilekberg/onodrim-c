@@ -10,12 +10,15 @@ namespace onodrim::shaders::sprite
 
 			in mat3 in_matrix;
 			in vec4 in_color;
+			in float depth;
 			out vec4 v_color;
 			uniform mat4 u_projection;
+			
 			void main(void)
 			{
 				vec3 pos = in_matrix * vec3(vertex, 1);
-				gl_Position = u_projection*vec4(pos, 1);
+				vec4 final = vec4(pos.xy, depth, 1);
+				gl_Position = u_projection * final;
 				v_color = in_color;
 			}
 		)";

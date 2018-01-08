@@ -146,12 +146,43 @@ namespace onodrim {
 
 		inline Matrix4& Translate(float x, float y, float z)
 		{
-			Multiply(Matrix4{
-				1, 0, 0, 0,
-				0, 1, 0, 0,
-				0, 0, 1, 0,
-				x, y, z, 1
-			});
+			const float a00 = m_Values[M00];
+			const float a01 = m_Values[M01];
+			const float a02 = m_Values[M02];
+			const float a03 = m_Values[M03];
+			const float a10 = m_Values[M10];
+			const float a11 = m_Values[M11];
+			const float a12 = m_Values[M12];
+			const float a13 = m_Values[M13];
+			const float a20 = m_Values[M20];
+			const float a21 = m_Values[M21];
+			const float a22 = m_Values[M22];
+			const float a23 = m_Values[M23];
+			const float a30 = m_Values[M30];
+			const float a31 = m_Values[M31];
+			const float a32 = m_Values[M32];
+			const float a33 = m_Values[M33];
+			const float b30 = x;
+			const float b31 = y;
+			const float b32 = z;
+			m_Values = {
+				(a00) + (a03 * b30),
+				(a01) + (a03 * b31),
+				(a02) + (a03 * b32),
+				(a03),
+				(a10) + (a13 * b30),
+				(a11) + (a13 * b31),
+				(a12) + (a13 * b32),
+				(a13),
+				(a20) + (a23 * b30),
+				(a21) + (a23 * b31),
+				(a22) + (a23 * b32),
+				(a23),
+				(a30) + (a33 * b30),
+				(a31) + (a33 * b31),
+				(a32) + (a33 * b32),
+				(a33)
+			};
 			return *this;
 		}
 
@@ -162,12 +193,43 @@ namespace onodrim {
 
 		inline Matrix4& Scale(float x, float y, float z)
 		{
-			Multiply(Matrix4{
-				x, 0, 0, 0,
-				0, y, 0, 0,
-				0, 0, z, 0,
-				0, 0, 0, 1
-			});
+			const float a00 = m_Values[M00];
+			const float a01 = m_Values[M01];
+			const float a02 = m_Values[M02];
+			const float a03 = m_Values[M03];
+			const float a10 = m_Values[M10];
+			const float a11 = m_Values[M11];
+			const float a12 = m_Values[M12];
+			const float a13 = m_Values[M13];
+			const float a20 = m_Values[M20];
+			const float a21 = m_Values[M21];
+			const float a22 = m_Values[M22];
+			const float a23 = m_Values[M23];
+			const float a30 = m_Values[M30];
+			const float a31 = m_Values[M31];
+			const float a32 = m_Values[M32];
+			const float a33 = m_Values[M33];
+			const float b00 = x;
+			const float b11 = y;
+			const float b22 = z;
+			m_Values = {
+				(a00 * b00),
+				(a01 * b11),
+				(a02 * b22),
+				(a03),
+				(a10 * b00),
+				(a11 * b11),
+				(a12 * b22),
+				(a13),
+				(a20 * b00),
+				(a21 * b11),
+				(a22 * b22),
+				(a23),
+				(a30 * b00),
+				(a31 * b11),
+				(a32 * b22),
+				(a33)
+			};
 			return *this;
 		}
 

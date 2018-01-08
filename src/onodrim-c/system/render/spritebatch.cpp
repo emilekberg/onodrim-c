@@ -50,17 +50,22 @@ namespace onodrim::system::render
 		// Hack because camera might not exist here yet. need to fix this :).
 		GLint projectionLocation = glGetUniformLocation(m_Program->GetAddress(), "u_projection");
 		if (projectionLocation != -1) {
-			float width = 800.0f;
-			float height = 600.0f;
-			float depth = 400.0f;
-			static Matrix4 mat4x4;
-			mat4x4.Identity()
-				.Scale(1.0f / width, 1.0f / height, 2.0f / depth)
-				.Scale(2, 2, 1)
-				.Translate(-1, -1, 0)
-				.Scale(1, -1, 1);
-			
-			glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, mat4x4.GetArray());
+			float left = 0;
+			float right = 800;
+			float bottom = 600;
+			float top = 0;
+			float near = 400;
+			float far = -400;
+			static Matrix4 mat4x4Ortho = 
+			{
+				2.0f / (right - left), 0, 0, 0,
+				0, 2 / (top - bottom), 0, 0,
+				0, 0, 2 / (near - far), 0,
+				(left + right) / (left - right),
+				(bottom + top) / (bottom - top),
+				(near + far) / (near - far), 1
+			};
+			glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, mat4x4Ortho.GetArray());
 		}
 
 		vertLocation = glGetAttribLocation(m_Program->GetAddress(), "vertex");
@@ -68,7 +73,7 @@ namespace onodrim::system::render
 
 		m_InstanceAttributes.push_back(InstanceAttribute<GLfloat>(glGetAttribLocation(m_Program->GetAddress(), "in_matrix"), 3, GL_FALSE, 3, 1));
 		m_InstanceAttributes.push_back(InstanceAttribute<GLfloat>(glGetAttribLocation(m_Program->GetAddress(), "in_color"), 4, GL_FALSE, 1, 1));
-
+		m_InstanceAttributes.push_back(InstanceAttribute<GLfloat>(glGetAttribLocation(m_Program->GetAddress(), "in_depth"), 1, GL_FALSE, 1, 1));
 		// InstanceAttribute<GLfloat> matrixAttribute(matrixLocation, 3, false, 3, 1);
 
 		glGenVertexArrays(1, &vao);
@@ -90,7 +95,7 @@ namespace onodrim::system::render
 			glVertexAttribDivisor(vertLocation, 0);
 
 			glBindBuffer(GL_ARRAY_BUFFER, m_GLBuffers[BUFFER_INSTANCE]);
-			glBufferData(GL_ARRAY_BUFFER, SIZE * 3 * 3 * sizeof(float), m_InstanceDataArray, GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, SIZE * ((3 * 3) + 4 + 1) * sizeof(float), m_InstanceDataArray, GL_STATIC_DRAW);
 
 			int offset = 0;
 			int currentOffset = 0;
@@ -111,16 +116,6 @@ namespace onodrim::system::render
 				}
 				offset += value.Stride;
 			}
-
-			/*glEnableVertexAttribArray(matrixLocation);
-			glEnableVertexAttribArray(matrixLocation + 1);
-			glEnableVertexAttribArray(matrixLocation + 2);
-			glVertexAttribPointer(matrixLocation, 3, GL_FLOAT, GL_FALSE, 3 * 3 * sizeof(GL_FLOAT), (void*)(3 * sizeof(GL_FLOAT) * 0));
-			glVertexAttribPointer(matrixLocation + 1, 3, GL_FLOAT, GL_FALSE, 3 * 3 * sizeof(GL_FLOAT), (void*)(3 * sizeof(GL_FLOAT) * 1));
-			glVertexAttribPointer(matrixLocation + 2, 3, GL_FLOAT, GL_FALSE, 3 * 3 * sizeof(GL_FLOAT), (void*)(3 * sizeof(GL_FLOAT) * 2));
-			glVertexAttribDivisor(matrixLocation, 1);
-			glVertexAttribDivisor(matrixLocation + 1, 1);
-			glVertexAttribDivisor(matrixLocation + 2, 1);*/
 		}
 		glBindVertexArray(NULL);
 	}
@@ -137,18 +132,22 @@ namespace onodrim::system::render
 		
 	}
 
-	void Spritebatch::Render(Matrix3& matrix, Color& color)
+	void Spritebatch::Render(Matrix3& matrix, Color& color, float depth)
 	{
-		static const int SIZE_PER_INSTANCE = 9 + 4;
-		memcpy(m_InstanceDataArray + (m_Count * SIZE_PER_INSTANCE), matrix.GetArray(), 9 * sizeof(float));
-		memcpy(m_InstanceDataArray + (m_Count * SIZE_PER_INSTANCE) + 9, color.values, 4 * sizeof(float));
+		static const int SIZE_PER_INSTANCE = 9 + 4 + 1;
+		int offset = (m_Count * SIZE_PER_INSTANCE);
+		memcpy(m_InstanceDataArray + offset, matrix.GetArray(), 9 * sizeof(float));
+		offset += 9;
+		memcpy(m_InstanceDataArray + offset, color.values, 4 * sizeof(float));
+		offset += 4;
+		m_InstanceDataArray[offset] = depth;
 		m_Count++;
 	}
 
 	void Spritebatch::Flush()
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, m_GLBuffers[BUFFER_INSTANCE]);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, m_Count * ((3 * 3) + 4) * sizeof(GL_FLOAT), m_InstanceDataArray);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, m_Count * ((3 * 3) + 4 + 1) * sizeof(GL_FLOAT), m_InstanceDataArray);
 		glBindVertexArray(vao);
 		//draw 3 vertices as triangles
 		glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, NULL, m_Count);

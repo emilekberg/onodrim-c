@@ -54,13 +54,13 @@ namespace onodrim::system::render
 		glewInit();
 #endif		
 		LOG_INFO("OpenGLSystem::InitGL \n\t %s: %s \n\t %s: %s \n\t %s: %s", "vendor string", glGetString(GL_VENDOR), "renderer string", glGetString(GL_RENDERER), "version string", glGetString(GL_VERSION));
-
+		// glEnable(GL_CULL_FACE);
 		glClearColor(0.39f, 0.58f, 0.92f, 1.0f);
 		CheckError();
-		glEnable(GL_DEPTH_TEST);
-		CheckError();
-		glDepthFunc(GL_LEQUAL);
-		CheckError();
+		// glEnable(GL_DEPTH_TEST);
+		// CheckError();
+		// glDepthFunc(GL_LEQUAL);
+		// CheckError();
 		glEnable(GL_BLEND);
 		CheckError();
 		glBlendEquation(GL_FUNC_ADD);

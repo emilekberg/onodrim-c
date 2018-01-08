@@ -54,17 +54,19 @@ public:
 		m_pTransform = m_pEntity->GetComponent<onodrim::Transform2d>();
 		m_pSprite = m_pEntity->GetComponent<onodrim::Sprite>();
 		m_Direction = direction;
-
+		m_Depth = 10.0f;
 
 		switch (m_Direction)
 		{
 		case 0:
 			m_pSprite->Color.SetHex(0xff0000);
 			m_pSprite->Color.SetAlpha(0.5f);
-			m_pTransform->SetPosition(200, 200);
+			m_pSprite->SetDepth(m_Depth);
+			m_pTransform->SetPosition(100, 100);
 			break;
 		case 1:
 			m_pSprite->Color.SetHex(0xff00ff);
+			m_pSprite->SetDepth(0);
 			m_pSprite->Color.SetAlpha(0.5f);
 			break;
 		}
@@ -76,19 +78,23 @@ public:
 		switch (m_Direction)
 		{
 		case 0:
+			m_Depth -= 0.1f;
+			m_pSprite->SetDepth(m_Depth);
+			
 			// m_pTransform->Translate(1.f, 0);
 			break;
 		case 1:
 			// m_pTransform->Translate(0, 1.f);
 			break;
 		}
-
+		LOG_DEBUG("depth: %f", m_pSprite->GetDepth());
 	}
 
 private:
 	onodrim::Transform2d* m_pTransform;
 	onodrim::Sprite* m_pSprite;
 	int m_Direction;
+	float m_Depth;
 };
 
 

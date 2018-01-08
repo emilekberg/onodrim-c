@@ -54,7 +54,7 @@ namespace onodrim::system::render
 		}
 
 		void Begin();
-		void Render(Matrix3& matrix, Color& color);
+		void Render(Matrix3& matrix, Color& color, float depth);
 		void End();
 		void Flush();
 	protected:
@@ -68,7 +68,7 @@ namespace onodrim::system::render
 		const static int BUFFER_INSTANCE = 2;
 		const static int SIZE = 2000;
 
-		float m_InstanceDataArray[SIZE * ((3 * 3) + 4) * sizeof(float)];
+		float m_InstanceDataArray[SIZE * ((3 * 3) + 4 + 1) * sizeof(float)];
 
 		std::vector<InstanceAttribute<GLfloat>> m_InstanceAttributes;
 		GLuint vao;

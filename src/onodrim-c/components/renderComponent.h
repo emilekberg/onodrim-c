@@ -55,6 +55,11 @@ namespace onodrim {
 		{
 			return m_Depth;
 		}
+		inline virtual void SetDepth(float depth)
+		{
+			m_Depth = depth;
+			m_ZChanged = true;
+		}
 
 		inline virtual bool IsVisible()
 		{
