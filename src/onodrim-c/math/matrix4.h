@@ -250,11 +250,11 @@ namespace onodrim {
 
 		bool operator==(Matrix4& toCompare)
 		{
-			return memcmp(&m_Values, &toCompare.m_Values, 36) == 0;
+			return memcmp(&m_Values, &toCompare.m_Values, 16 * sizeof(float)) == 0;
 		}
 		void operator=(Matrix4& toCopy)
 		{
-			memcpy(&m_Values, &toCopy, 36);
+			memcpy(&m_Values, &toCopy, 16*sizeof(float));
 		}
 		void operator=(const std::initializer_list<float> list)
 		{
