@@ -35,7 +35,7 @@
     <ClCompile Include="data\color.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="math\matrix.cpp">
+    <ClCompile Include="json_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

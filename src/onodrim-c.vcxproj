@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -28,7 +28,6 @@
     <ClCompile Include="onodrim-c\components\transform2d.cpp" />
     <ClCompile Include="onodrim-c\core.cpp" />
     <ClCompile Include="onodrim-c\entity.cpp" />
-    <ClCompile Include="onodrim-c\JSON.cpp" />
     <ClCompile Include="onodrim-c\math\matrix4.h" />
     <ClCompile Include="onodrim-c\system\render\render-system.cpp" />
     <ClCompile Include="onodrim-c\system\systemManager.cpp" />
@@ -38,7 +37,7 @@
     <ClInclude Include="onodrim-c\components\camera2d.h" />
     <ClInclude Include="onodrim-c\data\color.h" />
     <ClInclude Include="onodrim-c\data\texture.h" />
-    <ClInclude Include="onodrim-c\JSON.h" />
+    <ClInclude Include="onodrim-c\json.h" />
     <ClInclude Include="onodrim-c\fileloader.h" />
     <ClInclude Include="onodrim-c\components\component.h" />
     <ClInclude Include="onodrim-c\components\fixedUpdateComponent.h" />
@@ -49,7 +48,6 @@
     <ClInclude Include="onodrim-c\components\updateComponent.h" />
     <ClInclude Include="onodrim-c\core.h" />
     <ClInclude Include="onodrim-c\math\math.h" />
-    <ClInclude Include="onodrim-c\math\matrix.h" />
     <ClInclude Include="onodrim-c\shaders\program.h" />
     <ClInclude Include="onodrim-c\data\renderState.h" />
     <ClInclude Include="onodrim-c\shaders\shader.h" />
@@ -68,6 +66,7 @@
     <ClInclude Include="onodrim-c\system\update\fixedUpdateSystem.h" />
     <ClInclude Include="onodrim-c\system\update\updateSystem.h" />
     <ClInclude Include="onodrim-c\utils\logger.h" />
+    <ClInclude Include="onodrim-c\utils\string.h" />
     <ClInclude Include="onodrim-c\utils\time.h" />
     <ClInclude Include="onodrim-c\primitives\base-shape.h" />
     <ClInclude Include="onodrim-c\primitives\quad.h" />

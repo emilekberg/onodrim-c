@@ -11,9 +11,9 @@ namespace onodrim {
 		{
 			memset(&m_Values, 0, sizeof(T)*SIZE);
 		}
-		Vector(const std::initializer_list<T> list) : m_Values(list)
+		Vector(const std::initializer_list<T> list)
 		{
-
+			this->operator=(list);
 		}
 		~Vector()
 		{

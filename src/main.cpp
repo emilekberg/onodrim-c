@@ -159,6 +159,30 @@ extern "C"
 #else
 int main()
 {
+	std::string data = R"(
+{
+	str: "hello",
+	num: 42,
+	arr: [
+		0,
+		2,
+		4,
+		8
+	],
+	obj: {
+		num: 41
+	},
+	digit: 3.14
+})";
+	auto obj = onodrim::JSON::parse(data);
+
+	int num = obj.Get<int>("num");
+	float digit = obj.Get<float>("digit");
+	std::string str = obj.Get<std::string>("str");
+	while (true)
+	{
+
+	}
 	core = new onodrim::Core();
 	entity = new onodrim::Entity();
 	entity->AddComponent(new onodrim::Transform2d(entity));

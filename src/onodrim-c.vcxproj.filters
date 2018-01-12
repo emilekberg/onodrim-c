@@ -42,9 +42,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="onodrim-c\JSON.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="onodrim-c\system\render\spritebatch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -125,9 +122,6 @@
     <ClInclude Include="onodrim-c\utils\time.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="onodrim-c\JSON.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="onodrim-c\math\rect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -170,7 +164,10 @@
     <ClInclude Include="onodrim-c\entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="onodrim-c\math\matrix.h">
+    <ClInclude Include="onodrim-c\utils\string.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="onodrim-c\json.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
