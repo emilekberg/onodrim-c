@@ -346,3 +346,4 @@ OpenCover/
 
 # Azure Stream Analytics local run output 
 ASALocalRun/
+/msvc/Output-Build.txt

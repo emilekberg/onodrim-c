@@ -176,9 +176,9 @@ int main()
 })";
 	auto obj = onodrim::JSON::parse(data);
 
-	int num = obj.Get<int>("num");
-	float digit = obj.Get<float>("digit");
-	std::string str = obj.Get<std::string>("str");
+	int num = obj->Get<int>("num");
+	float digit = obj->Get<float>("digit");
+	std::string str = obj->Get<std::string>("str");
 	while (true)
 	{
 
