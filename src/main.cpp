@@ -159,7 +159,7 @@ extern "C"
 #else
 int main()
 {
-	std::string data = R"(
+	static std::string data = R"(
 {
 	str: "hello",
 	num: 42,
@@ -169,8 +169,18 @@ int main()
 		4,
 		8
 	],
+	strArr: [
+		"hej",
+		"dig",
+		"du"
+	],	
 	obj: {
-		num: 41
+		num: 41,
+		arrayOfObjects: [
+			{someNumber: 0},
+			{someNumber: 2},
+			{someNumber: 4}
+		]
 	},
 	digit: 3.14
 })";
@@ -179,9 +189,9 @@ int main()
 	int num = obj->Get<int>("num");
 	float digit = obj->Get<float>("digit");
 	std::string str = obj->Get<std::string>("str");
+	
 	while (true)
 	{
-
 	}
 	core = new onodrim::Core();
 	entity = new onodrim::Entity();
@@ -195,6 +205,7 @@ int main()
 	entity->AddComponent(new MoveComponent(entity, 1));
 
 	core->Start();
+	
 	return 0;
 }
 #endif

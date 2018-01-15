@@ -8,20 +8,26 @@
 #include "./utils/logger.h"
 #include "./utils/string.h"
 #include <memory>
+#include <istream>
 namespace onodrim
 {
 	class JSON
 	{
 	public:
+		JSON()
+		{
+
+		}
 		JSON(std::string& input)
 		{
-			std::string formatted = TrimString(input);
-			LOG_DEBUG("JSON::CTOR = %s", formatted.c_str());
+			ParseRawString(input);
+		}
 
+		void ParseRawString(std::string& input)
+		{
+			std::string formatted = TrimString(input);
 			std::string removed = formatted.substr(1, formatted.length() - 2);
-			LOG_DEBUG("Found: %s", removed.c_str());
-			auto splitString = split(removed, ',');
-			m_Map = VectorToMap(splitString);
+			parseString(removed, ',');
 		}
 
 		static std::shared_ptr<JSON> parse(std::string& input)
@@ -32,8 +38,8 @@ namespace onodrim
 		template <typename T>
 		T Get(const std::string& key)
 		{
-			auto it = m_Map.find(key);
-			if (it == m_Map.end())
+			auto it = m_map.find(key);
+			if (it == m_map.end())
 			{
 				return NULL;
 			}
@@ -46,9 +52,9 @@ namespace onodrim
 		template <typename T>
 		std::vector<T> GetArray(const std::string& key)
 		{
-			auto it = m_Map.find(key);
+			auto it = m_map.find(key);
 			std::vector<T> result;
-			if (it == m_Map.end())
+			if (it == m_map.end())
 			{
 				return result;
 			}
@@ -67,9 +73,9 @@ namespace onodrim
 		// TODO: refactor and make nicer less hacky
 		std::vector<std::shared_ptr<JSON>> GetArrayObj(const std::string& key)
 		{
-			auto it = m_Map.find(key);
+			auto it = m_map.find(key);
 			std::vector<std::shared_ptr<JSON>> result;
-			if (it == m_Map.end())
+			if (it == m_map.end())
 			{
 				return result;
 			}
@@ -85,9 +91,9 @@ namespace onodrim
 
 		std::shared_ptr<JSON> GetObject(const std::string& key)
 		{
-			auto it = m_Map.find(key);
+			auto it = m_map.find(key);
 			std::shared_ptr<JSON> result;
-			if (it == m_Map.end())
+			if (it == m_map.end())
 			{
 				return nullptr;
 			}
@@ -97,7 +103,7 @@ namespace onodrim
 		}
 
 	protected:
-		std::unordered_map<std::string, std::string> m_Map;
+		std::unordered_map<std::string, std::string> m_map;
 
 	protected:
 		static int FindIndexOfClosingCharacter(std::string& input, int indexOfOpenBracket, char opening, char closing)
@@ -127,58 +133,46 @@ namespace onodrim
 			return -1;
 		}
 
-		static std::vector<std::string> split(std::string& str, char split)
+		void parseString(std::string& str, char split)
 		{
-			int start = 0;
-			std::vector<std::string> result;
-			for (int i = 0; i < str.length(); ++i)
+			size_t start = 0;
+			for (size_t i = 0; i < str.length(); ++i)
 			{
 				if (str[i] == '[')
 				{
-
-					int index = FindIndexOfClosingCharacter(str, i, '[', ']');
-					std::string sub = str.substr(start, index - start + 1);
-					result.push_back(sub);
-					i = index + 1;
+					int end = FindIndexOfClosingCharacter(str, i, '[', ']');
+					std::string keyvalue = str.substr(start, end - start + 1);
+					std::size_t found = keyvalue.find(':');
+					m_map[keyvalue.substr(0, found)] = keyvalue.substr(found + 1, keyvalue.length() - found - 1);
+					i = end + 1;
 					start = i + 1;
 				}
 				else if (str[i] == '{')
 				{
 
-					int index = FindIndexOfClosingCharacter(str, i, '{', '}');
-					std::string sub = str.substr(start, index - start + 1);
-					result.push_back(sub);
-					i = index + 1;
+					int end = FindIndexOfClosingCharacter(str, i, '{', '}');
+					std::string keyvalue = str.substr(start, end - start + 1);
+					std::size_t found = keyvalue.find(':');
+					m_map[keyvalue.substr(0, found)] = keyvalue.substr(found + 1, keyvalue.length() - found - 1);
+					i = end + 1;
 					start = i + 1;
 				}
 				else if (str[i] == split)
 				{
-					std::string sub = str.substr(start, i - start);
-					result.push_back(sub);
+					std::string keyvalue = str.substr(start, i - start);
+					std::size_t found = keyvalue.find(':');
+					m_map[keyvalue.substr(0, found)] = keyvalue.substr(found + 1, keyvalue.length() - found - 1);
 					start = i + 1;
 				}
 			}
 			if (start < str.length())
 			{
-				result.push_back(str.substr(start, str.length() - start));
+				std::string keyvalue = str.substr(start, str.length() - start);
+				std::size_t found = keyvalue.find(':');
+				m_map[keyvalue.substr(0, found)] = keyvalue.substr(found + 1, keyvalue.length() - found - 1);
 			}
-
-			return result;
 		}
 
-		static std::vector<std::pair<std::string, std::string>> VectorToPair(std::vector<std::string> vector)
-		{
-			std::vector<std::pair<std::string, std::string>> result;
-			for (auto& value : vector)
-			{
-				std::pair<std::string, std::string> pair;
-				auto split = onodrim::utils::split(value, ':');
-				pair.first = split[0];
-				pair.second = split[1];
-				result.push_back(pair);
-			}
-			return result;
-		}
 		static std::unordered_map<std::string, std::string> VectorToMap(std::vector<std::string> vector)
 		{
 			std::unordered_map<std::string, std::string> result;
@@ -186,8 +180,6 @@ namespace onodrim
 			{
 				std::size_t found = value.find(':');
 				result[value.substr(0, found)] = value.substr(found+1, value.length()-found-1);
-				// auto splitString = onodrim::utils::split(value, ':');
-				// result[splitString[0]] = splitString[1];
 			}
 			return result;
 		}

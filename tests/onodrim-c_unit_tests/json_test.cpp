@@ -85,7 +85,7 @@ namespace onodrim_unit_tests
 			auto sub = obj->GetObject("obj");
 			auto arr = sub->GetArrayObj("arrayOfObjects");
 			Assert::AreEqual((size_t)3, arr.size());
-			for (int i = 0; i < arr.size(); i++)
+			for (int i = 0; i < (int)arr.size(); i++)
 			{
 				int number = arr[i]->Get<int>("someNumber");
 				Assert::AreEqual(i * 2, number);

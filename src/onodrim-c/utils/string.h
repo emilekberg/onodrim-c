@@ -4,9 +4,9 @@
 namespace onodrim::utils {
 	std::vector<std::string> split(std::string& str, char split)
 	{
-		int start = 0;
+		size_t start = 0;
 		std::vector<std::string> result;
-		for (int i = 0; i < str.length(); ++i)
+		for (size_t i = 0; i < str.length(); ++i)
 		{
 			if (str[i] == split)
 			{
