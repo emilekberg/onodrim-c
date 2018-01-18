@@ -1,26 +1,29 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <utility>
 #include <unordered_map>
 #include <sstream>
 #include <regex>
+#include <istream>
 #include "./utils/logger.h"
 #include "./utils/string.h"
-#include <memory>
-#include <istream>
 namespace onodrim
 {
 	class JSON
 	{
 	public:
+		
 		JSON()
 		{
-
 		}
 		JSON(std::string& input)
 		{
 			ParseRawString(input);
+		}
+
+		inline bool HasValues() const
+		{
+			return !m_map.empty();
 		}
 
 		void ParseRawString(std::string& input)
@@ -30,75 +33,17 @@ namespace onodrim
 			parseString(removed, ',');
 		}
 
-		static std::shared_ptr<JSON> parse(std::string& input)
-		{
-			return std::make_shared<JSON>(input);
-		}
-
 		template <typename T>
 		T Get(const std::string& key)
 		{
 			auto it = m_map.find(key);
 			if (it == m_map.end())
 			{
-				return NULL;
+				return T();
 			}
 			std::stringstream convert(it->second);
 			T result;
 			convert >> result;
-			return result;
-		}
-
-		template <typename T>
-		std::vector<T> GetArray(const std::string& key)
-		{
-			auto it = m_map.find(key);
-			std::vector<T> result;
-			if (it == m_map.end())
-			{
-				return result;
-			}
-
-			auto values = utils::split(it->second.substr(1, it->second.length() - 2), ',');
-			for (auto& value : values)
-			{
-				std::stringstream convert(value);
-				T castedValue;
-				convert >> castedValue;
-				result.push_back(castedValue);
-			}
-			return result;
-		}
-
-		// TODO: refactor and make nicer less hacky
-		std::vector<std::shared_ptr<JSON>> GetArrayObj(const std::string& key)
-		{
-			auto it = m_map.find(key);
-			std::vector<std::shared_ptr<JSON>> result;
-			if (it == m_map.end())
-			{
-				return result;
-			}
-
-			auto values = utils::split(it->second.substr(1, it->second.length() - 2), ',');
-			for (auto& value : values)
-			{
-				std::shared_ptr<JSON> castValue = std::make_shared<JSON>(value);
-				result.push_back(castValue);
-			}
-			return result;
-		}
-
-		std::shared_ptr<JSON> GetObject(const std::string& key)
-		{
-			auto it = m_map.find(key);
-			std::shared_ptr<JSON> result;
-			if (it == m_map.end())
-			{
-				return nullptr;
-			}
-
-			result = std::make_shared<JSON>(it->second);
 			return result;
 		}
 
@@ -190,4 +135,26 @@ namespace onodrim
 			return std::regex_replace(input, regexSpaceTabNewline, "");
 		}
 	};
+
+	std::istream& operator>>(std::istream& ss, JSON& object)
+	{
+		std::string s(std::istreambuf_iterator<char>(ss), {});
+		object.ParseRawString(s);
+		return ss;
+	}
+
+	template <typename T>
+	std::istream& operator>> (std::istream& ss, std::vector<T>& vector)
+	{
+		std::string s(std::istreambuf_iterator<char>(ss), {});
+		auto values = utils::split(s.substr(1, s.length() - 2), ',');
+		for (auto& value : values)
+		{
+			std::stringstream convert(value);
+			T castedValue;
+			convert >> castedValue;
+			vector.push_back(castedValue);
+		}
+		return ss;
+	}
 }

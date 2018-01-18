@@ -184,11 +184,11 @@ int main()
 	},
 	digit: 3.14
 })";
-	auto obj = onodrim::JSON::parse(data);
+	auto obj = onodrim::JSON(data);
 
-	int num = obj->Get<int>("num");
-	float digit = obj->Get<float>("digit");
-	std::string str = obj->Get<std::string>("str");
+	int num = obj.Get<int>("num");
+	float digit = obj.Get<float>("digit");
+	std::string str = obj.Get<std::string>("str");
 	
 	while (true)
 	{

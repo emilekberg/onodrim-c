@@ -26,31 +26,34 @@ static std::string data = R"(
 	},
 	digit: 3.14
 })";
+onodrim::JSON obj;
 namespace onodrim_unit_tests
 {
 	TEST_CLASS(JSON)
 	{
 	public:
 
+		TEST_METHOD(JSON_HasValues_Empty)
+		{
+			Assert::IsFalse(obj.HasValues());
+		}
 		TEST_METHOD(JSON_Ctor)
 		{
-			auto obj = onodrim::JSON::parse(data);
+			obj = onodrim::JSON(data);
+			Assert::IsTrue(obj.HasValues());
 			
 		}
 		TEST_METHOD(JSON_Get_int_)
 		{
-			auto obj = onodrim::JSON::parse(data);
-			Assert::AreEqual(42, obj->Get<int>("num"));
+			Assert::AreEqual(42, obj.Get<int>("num"));
 		}
 		TEST_METHOD(JSON_Get_string_)
 		{
-			auto obj = onodrim::JSON::parse(data);
-			Assert::AreEqual((std::string)"hello", obj->Get<std::string>("str"));
+			Assert::AreEqual((std::string)"hello", obj.Get<std::string>("str"));
 		}
 		TEST_METHOD(JSON_GetArray_int)
 		{
-			auto obj = onodrim::JSON::parse(data);
-			auto actual = obj->GetArray<int>("arr");
+			auto actual = obj.Get<std::vector<int>>("arr");
 			Assert::AreEqual(0, actual[0]);
 			Assert::AreEqual(2, actual[1]);
 			Assert::AreEqual(4, actual[2]);
@@ -58,36 +61,31 @@ namespace onodrim_unit_tests
 		}
 		TEST_METHOD(JSON_GetArray_string)
 		{
-			auto obj = onodrim::JSON::parse(data);
-			auto actual = obj->GetArray<std::string>("strArr");
+			auto actual = obj.Get<std::vector<std::string>>("strArr");
 			Assert::AreEqual((std::string)"hej", actual[0]);
 			Assert::AreEqual((std::string)"dig", actual[1]);
 			Assert::AreEqual((std::string)"du", actual[2]);
 		}
 		TEST_METHOD(JSON_GetObject)
 		{
-			auto obj = onodrim::JSON::parse(data);
-			auto actual = obj->GetObject("obj");
-			bool result = actual == nullptr;
-			Assert::IsFalse(result);
+			auto actual = obj.Get<onodrim::JSON>("obj");
+			Assert::IsTrue(actual.HasValues());
 		}
 
 		TEST_METHOD(JSON_GetObject_Get_Int)
 		{
-			auto obj = onodrim::JSON::parse(data);
-			auto actual = obj->GetObject("obj");
-			Assert::AreEqual(41, actual->Get<int>("num"));
+			auto actual = obj.Get<onodrim::JSON>("obj");
+			Assert::AreEqual(41, actual.Get<int>("num"));
 		}
 
 		TEST_METHOD(JSON_GetObject_GetArray_object)
 		{
-			auto obj = onodrim::JSON::parse(data);
-			auto sub = obj->GetObject("obj");
-			auto arr = sub->GetArrayObj("arrayOfObjects");
+			auto sub = obj.Get<onodrim::JSON>("obj");
+			auto arr = sub.Get<std::vector<onodrim::JSON>>("arrayOfObjects");
 			Assert::AreEqual((size_t)3, arr.size());
 			for (int i = 0; i < (int)arr.size(); i++)
 			{
-				int number = arr[i]->Get<int>("someNumber");
+				int number = arr[i].Get<int>("someNumber");
 				Assert::AreEqual(i * 2, number);
 			}
 		}
