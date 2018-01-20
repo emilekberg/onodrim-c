@@ -184,8 +184,14 @@ int main()
 	},
 	digit: 3.14
 })";
-	auto obj = onodrim::JSON(data);
 
+
+	for (int i = 0; i < 10000; ++i)
+	{
+		auto obj = onodrim::JSON(data);
+	}
+	return 0;
+	/*
 	int num = obj.Get<int>("num");
 	float digit = obj.Get<float>("digit");
 	std::string str = obj.Get<std::string>("str");
@@ -205,7 +211,7 @@ int main()
 	entity->AddComponent(new MoveComponent(entity, 1));
 
 	core->Start();
-	
+	*/
 	return 0;
 }
 #endif

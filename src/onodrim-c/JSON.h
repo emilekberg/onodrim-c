@@ -5,8 +5,8 @@
 #include <sstream>
 #include <regex>
 #include <istream>
-#include "./utils/logger.h"
-#include "./utils/string.h"
+#include <algorithm>
+#include <array>
 namespace onodrim
 {
 	class JSON
@@ -60,11 +60,11 @@ namespace onodrim
 				return -1;
 			}
 
-			for (int i = indexOfOpenBracket + 1; i < length; i++)
+			for (int i = indexOfOpenBracket + 1; i < length; ++i)
 			{
 				if (input[i] == opening)
 				{
-					level++;
+					++level;
 				}
 				if (input[i] == closing)
 				{
@@ -72,7 +72,7 @@ namespace onodrim
 					{
 						return i;
 					}
-					level--;
+					--level;
 				}
 			}
 			return -1;
@@ -81,7 +81,8 @@ namespace onodrim
 		void parseString(std::string& str, char split)
 		{
 			size_t start = 0;
-			for (size_t i = 0; i < str.length(); ++i)
+			size_t length = str.length();
+			for (size_t i = 0; i < length; ++i)
 			{
 				if (str[i] == '[')
 				{
@@ -110,9 +111,9 @@ namespace onodrim
 					start = i + 1;
 				}
 			}
-			if (start < str.length())
+			if (start < length)
 			{
-				std::string keyvalue = str.substr(start, str.length() - start);
+				std::string keyvalue = str.substr(start, length - start);
 				std::size_t found = keyvalue.find(':');
 				m_map[keyvalue.substr(0, found)] = keyvalue.substr(found + 1, keyvalue.length() - found - 1);
 			}
@@ -129,10 +130,34 @@ namespace onodrim
 			return result;
 		}
 
-		static std::string TrimString(std::string& input)
+		static std::string TrimString(std::string input)
 		{
-			static const std::regex regexSpaceTabNewline("[\\t\\s\\n\\r\"\']");
-			return std::regex_replace(input, regexSpaceTabNewline, "");
+			static const std::array<char, 6> toReplace = {
+				'\t',
+				' ',
+				'\n',
+				'\r',
+				'\"',
+				'\''
+			};
+			size_t num = 0;
+			for (size_t i = 1; i < input.length(); ++i)
+			{
+				if (std::find(toReplace.begin(), toReplace.end(), input[i]) != toReplace.end())
+				{
+					num++;
+				}
+				else
+				{
+					if (num)
+					{
+						i -= num;
+						input.erase(i, num);
+					}
+					num = 0;
+				}
+			}
+			return input;
 		}
 	};
 
@@ -147,14 +172,24 @@ namespace onodrim
 	std::istream& operator>> (std::istream& ss, std::vector<T>& vector)
 	{
 		std::string s(std::istreambuf_iterator<char>(ss), {});
-		auto values = utils::split(s.substr(1, s.length() - 2), ',');
-		for (auto& value : values)
+		
+		const char separator = ',';
+		size_t start = 1;
+		for (size_t i = 1; i < s.length() - 2; ++i)
 		{
-			std::stringstream convert(value);
-			T castedValue;
-			convert >> castedValue;
-			vector.push_back(castedValue);
+			if (s[i] == separator)
+			{
+				std::stringstream convert(s.substr(start, i - start));
+				T castedValue;
+				convert >> castedValue;
+				vector.push_back(castedValue);
+				start = i + 1;
+			}
 		}
+		std::stringstream convert(s.substr(start, (s.length() - 1) - start));
+		T castedValue;
+		convert >> castedValue;
+		vector.push_back(castedValue);
 		return ss;
 	}
 }

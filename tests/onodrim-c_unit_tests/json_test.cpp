@@ -26,7 +26,7 @@ static std::string data = R"(
 	},
 	digit: 3.14
 })";
-onodrim::JSON obj;
+onodrim::JSON obj = onodrim::JSON(data);
 namespace onodrim_unit_tests
 {
 	TEST_CLASS(JSON)
@@ -35,13 +35,13 @@ namespace onodrim_unit_tests
 
 		TEST_METHOD(JSON_HasValues_Empty)
 		{
-			Assert::IsFalse(obj.HasValues());
+			onodrim::JSON emptyObject;
+			Assert::IsFalse(emptyObject.HasValues());
 		}
 		TEST_METHOD(JSON_Ctor)
 		{
-			obj = onodrim::JSON(data);
-			Assert::IsTrue(obj.HasValues());
-			
+			onodrim::JSON obj_ctor(data);
+			Assert::IsTrue(obj_ctor.HasValues());
 		}
 		TEST_METHOD(JSON_Get_int_)
 		{

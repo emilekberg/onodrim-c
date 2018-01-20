@@ -40,8 +40,8 @@ namespace onodrim
 	void Camera2D::SetViewPort(int width, int height)
 	{
 		m_IsDirty = true;
-		m_Viewport[0] = width;
-		m_Viewport[1] = height;
+		m_Viewport[0] = static_cast<float>(width);
+		m_Viewport[1] = static_cast<float>(height);
 		UpdateProjectionMatrix();
 		UpdateViewMatrix();
 	}
