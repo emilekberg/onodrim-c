@@ -30,7 +30,7 @@ namespace onodrim
 		{
 			std::string formatted = TrimString(input);
 			std::string removed = formatted.substr(1, formatted.length() - 2);
-			parseString(removed, ',');
+			ParseString(removed, ',');
 		}
 
 		template <typename T>
@@ -78,7 +78,7 @@ namespace onodrim
 			return -1;
 		}
 
-		void parseString(std::string& str, char split)
+		void ParseString(std::string& str, char split)
 		{
 			size_t start = 0;
 			size_t length = str.length();
@@ -119,18 +119,7 @@ namespace onodrim
 			}
 		}
 
-		static std::unordered_map<std::string, std::string> VectorToMap(std::vector<std::string> vector)
-		{
-			std::unordered_map<std::string, std::string> result;
-			for (auto& value : vector)
-			{
-				std::size_t found = value.find(':');
-				result[value.substr(0, found)] = value.substr(found+1, value.length()-found-1);
-			}
-			return result;
-		}
-
-		static std::string TrimString(std::string input)
+		std::string TrimString(std::string input)
 		{
 			static const std::array<char, 6> toReplace = {
 				'\t',
@@ -143,7 +132,8 @@ namespace onodrim
 			size_t num = 0;
 			for (size_t i = 1; i < input.length(); ++i)
 			{
-				if (std::find(toReplace.begin(), toReplace.end(), input[i]) != toReplace.end())
+				if(compareWithData<toReplace.size()>(input[i], toReplace.data()))
+				// if(std::find(toReplace.begin(), toReplace.end(), input[i]) != toReplace.end())
 				{
 					num++;
 				}
@@ -159,6 +149,27 @@ namespace onodrim
 			}
 			return input;
 		}
+
+	private:
+		/*
+			hacker helper methods to unroll the loop and inline it.
+		*/
+		template<int SIZE>
+		__forceinline bool comparer(const char& a, const char* compare, int i)
+		{
+			return comparer<1>(a, compare, i) || comparer<SIZE - 1>(a, compare, i + 1);
+		}
+
+		template<>
+		__forceinline bool comparer<1>(const char& a, const char* compare, int i)
+		{
+			return compare[i] == a;
+		}
+		template<int SIZE>
+		__forceinline bool compareWithData(const char& a, const char* compare)
+		{
+			return comparer<SIZE>(a, compare, 0);
+		}
 	};
 
 	std::istream& operator>>(std::istream& ss, JSON& object)
@@ -169,13 +180,14 @@ namespace onodrim
 	}
 
 	template <typename T>
-	std::istream& operator>> (std::istream& ss, std::vector<T>& vector)
+	std::istream& operator>>(std::istream& ss, std::vector<T>& vector)
 	{
 		std::string s(std::istreambuf_iterator<char>(ss), {});
 		
 		const char separator = ',';
 		size_t start = 1;
-		for (size_t i = 1; i < s.length() - 2; ++i)
+		size_t length = s.length() - 2;
+		for (size_t i = 1; i < length; ++i)
 		{
 			if (s[i] == separator)
 			{
