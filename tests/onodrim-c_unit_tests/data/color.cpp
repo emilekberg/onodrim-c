@@ -1,3 +1,4 @@
+#include "../stdafx.h"
 #include "CppUnitTest.h"
 #include "../../../src/onodrim-c/data/color.h"
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;

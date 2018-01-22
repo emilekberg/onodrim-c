@@ -1,12 +1,13 @@
 #pragma once
-#include <string>
 #include <vector>
 #include <unordered_map>
 #include <sstream>
-#include <regex>
+#include <iostream>
 #include <istream>
+#include <string>
 #include <algorithm>
 #include <array>
+
 namespace onodrim
 {
 	class JSON
@@ -29,8 +30,7 @@ namespace onodrim
 		void ParseRawString(std::string& input)
 		{
 			std::string formatted = TrimString(input);
-			std::string removed = formatted.substr(1, formatted.length() - 2);
-			ParseString(removed, ',');
+			ParseString(formatted);
 		}
 
 		template <typename T>
@@ -41,32 +41,50 @@ namespace onodrim
 			{
 				return T();
 			}
-			std::stringstream convert(it->second);
+			std::stringstream ss(it->second);
 			T result;
-			convert >> result;
+			ss >> std::noskipws >> result;
 			return result;
+		}
+		template <>
+		std::string Get<std::string>(const std::string& key)
+		{
+			auto it = m_map.find(key);
+			if (it == m_map.end())
+			{
+				return "";
+			}
+			return it->second;
+		}
+
+		template <typename T>
+		void Set(const std::string& key, const T& value)
+		{
+			std::stringstream convert;
+			convert << std::noskipws << value;
+			m_map[key] = convert.str();
 		}
 
 	protected:
 		std::unordered_map<std::string, std::string> m_map;
 
 	protected:
-		static int FindIndexOfClosingCharacter(std::string& input, int indexOfOpenBracket, char opening, char closing)
+		static int FindIndexOfClosingCharacter(const std::string& input, int indexOfOpenBracket, char opening, char closing)
 		{
 			int level = 0;
-			int length = input.length();
+			int length = input.length()-1;
 			if (indexOfOpenBracket == -1 || indexOfOpenBracket > length || input[indexOfOpenBracket] != opening)
 			{
 				return -1;
 			}
 
-			for (int i = indexOfOpenBracket + 1; i < length; ++i)
+			for (int i = indexOfOpenBracket+1; i < length; ++i)
 			{
-				if (input[i] == opening)
+				if (input[i] == opening && !(opening == closing))
 				{
 					++level;
 				}
-				if (input[i] == closing)
+				else if (input[i] == closing)
 				{
 					if (level == 0)
 					{
@@ -78,13 +96,13 @@ namespace onodrim
 			return -1;
 		}
 
-		void ParseString(std::string& str, char split)
+		void ParseString(const std::string& str)
 		{
-			size_t start = 0;
-			size_t length = str.length();
-			for (size_t i = 0; i < length; ++i)
+			size_t start = 1;
+			size_t length = str.length()-1;
+			for (size_t i = start; i < length; ++i)
 			{
-				if (str[i] == '[')
+				if (IsArray(str[i]))
 				{
 					int end = FindIndexOfClosingCharacter(str, i, '[', ']');
 					std::string keyvalue = str.substr(start, end - start + 1);
@@ -93,7 +111,7 @@ namespace onodrim
 					i = end + 1;
 					start = i + 1;
 				}
-				else if (str[i] == '{')
+				else if (IsObject(str[i]))
 				{
 
 					int end = FindIndexOfClosingCharacter(str, i, '{', '}');
@@ -103,7 +121,7 @@ namespace onodrim
 					i = end + 1;
 					start = i + 1;
 				}
-				else if (str[i] == split)
+				else if (IsSeparator(str[i]))
 				{
 					std::string keyvalue = str.substr(start, i - start);
 					std::size_t found = keyvalue.find(':');
@@ -119,6 +137,20 @@ namespace onodrim
 			}
 		}
 
+		inline bool IsArray(const char a)
+		{
+			return a == '[';
+		}
+
+		inline bool IsObject(const char a)
+		{
+			return a == '{';
+		}
+		inline bool IsSeparator(const char a)
+		{
+			return a == ',';
+		}
+
 		std::string TrimString(std::string input)
 		{
 			static const std::array<char, 6> toReplace = {
@@ -129,11 +161,22 @@ namespace onodrim
 				'\"',
 				'\''
 			};
+			// TODO: only remove certain of these signs outside of keys and values.
+			// think about this for a while :)
 			size_t num = 0;
-			for (size_t i = 1; i < input.length(); ++i)
+			for (size_t i = 0; i < input.length(); ++i)
 			{
+				/*
+				if (input[i] == '\"')
+				{
+					size_t end = FindIndexOfClosingCharacter(input, i, '\"', '\"');
+					input.erase(i, 1);
+					i = end;
+					input.erase(i, 1);
+					continue;
+				}
+				*/
 				if(compareWithData<toReplace.size()>(input[i], toReplace.data()))
-				// if(std::find(toReplace.begin(), toReplace.end(), input[i]) != toReplace.end())
 				{
 					num++;
 				}
@@ -150,7 +193,6 @@ namespace onodrim
 			return input;
 		}
 
-	private:
 		/*
 			hacker helper methods to unroll the loop and inline it.
 		*/
@@ -172,17 +214,17 @@ namespace onodrim
 		}
 	};
 
-	std::istream& operator>>(std::istream& ss, JSON& object)
+	std::istream& operator>>(std::istream& is, JSON& object)
 	{
-		std::string s(std::istreambuf_iterator<char>(ss), {});
+		std::string s(std::istreambuf_iterator<char>(is), {});
 		object.ParseRawString(s);
-		return ss;
+		return is;
 	}
 
 	template <typename T>
-	std::istream& operator>>(std::istream& ss, std::vector<T>& vector)
+	std::istream& operator>>(std::istream& is, std::vector<T>& vector)
 	{
-		std::string s(std::istreambuf_iterator<char>(ss), {});
+		std::string s(std::istreambuf_iterator<char>(is), {});
 		
 		const char separator = ',';
 		size_t start = 1;
@@ -202,6 +244,6 @@ namespace onodrim
 		T castedValue;
 		convert >> castedValue;
 		vector.push_back(castedValue);
-		return ss;
+		return is;
 	}
 }
