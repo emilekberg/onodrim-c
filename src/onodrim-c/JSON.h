@@ -161,27 +161,34 @@ namespace onodrim
 				'\"',
 				'\''
 			};
-			// TODO: only remove certain of these signs outside of keys and values.
-			// think about this for a while :)
 			size_t num = 0;
 			for (size_t i = 0; i < input.length(); ++i)
 			{
-				/*
+				
+				// keep formatting within quotationmarks (keys and strings)
 				if (input[i] == '\"')
 				{
+					// would be nice to solve this in a different way
+					if (num > 0)
+					{
+						i -= num;
+						input.erase(i, num);
+						num = 0;
+					}
 					size_t end = FindIndexOfClosingCharacter(input, i, '\"', '\"');
 					input.erase(i, 1);
-					i = end;
-					input.erase(i, 1);
-					continue;
+					input.erase(end-1, 1);
+					i = end-2;
 				}
-				*/
+				
+				// increase buffer for removal if matches any of the to-remove signs
 				if(compareWithData<toReplace.size()>(input[i], toReplace.data()))
 				{
 					num++;
 				}
 				else
 				{
+					// if we have some buffer to remove, remove them from the string.
 					if (num)
 					{
 						i -= num;
@@ -245,5 +252,27 @@ namespace onodrim
 		convert >> castedValue;
 		vector.push_back(castedValue);
 		return is;
+	}
+
+	std::ostream& operator<<(std::ostream& os, const JSON& object)
+	{
+		throw "NOT IMPLEMENTED";
+		return os;
+	}
+
+	template <typename T>
+	std::ostream& operator<<(std::ostream& os, const std::vector<T>& vector)
+	{
+		os << '[';
+		for (size_t i = 0, length = vector.size(); i < length; ++i)
+		{
+			os << vector[i];
+			if (i < length-1)
+			{
+				os << ',';
+			}
+		}
+		os << ']';
+		return os;
 	}
 }

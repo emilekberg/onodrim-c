@@ -110,5 +110,29 @@ namespace onodrim_unit_tests
 			obj.Set("someString", "This is a string");
 			Assert::AreEqual((std::string)"This is a string", obj.Get<std::string>("someString"));
 		}
+
+		TEST_METHOD(JSON_Set_array_int)
+		{
+			std::vector<int> expected = {
+				1,2,3,10,2,2
+			};
+			onodrim::JSON obj;
+			obj.Set("someArray", expected);
+			auto actual = obj.Get<std::vector<int>>("someArray");
+			for (size_t i = 0; i < expected.size(); ++i)
+			{
+				Assert::AreEqual(expected[i], actual[i]);
+			}
+		}
+
+		TEST_METHOD(JSON_Set_json)
+		{
+			onodrim::JSON obj;
+			onodrim::JSON expected = onodrim::JSON((std::string)"{key: 123}");
+			obj.Set("someObject", expected);
+			auto actual = obj.Get<onodrim::JSON>("someObject");
+			Assert::IsTrue(actual.HasValues());
+			Assert::AreEqual(expected.Get<int>("key"), actual.Get<int>("key"));
+		}
 	};
 }
