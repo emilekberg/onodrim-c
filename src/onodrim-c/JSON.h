@@ -10,6 +10,40 @@
 
 namespace onodrim
 {
+	enum ValueTypes
+	{
+		Number,
+		Object,
+		Array,
+		String
+	} valueType;
+	struct Value
+	{
+	public:
+		Value() {}
+		explicit Value(ValueTypes type, std::string str) : m_type(type), m_value(str) {};
+
+		std::string toString()
+		{
+			if (m_type == ValueTypes::String)
+			{
+				static const std::string padding = "\"";
+				return padding + m_value + padding;
+			}
+			return m_value;
+		}
+
+		template<typename T>
+		T get()
+		{
+			// move parse from JSON object to here? would make logical sense to separate it. 
+			// JSON would only do m_value -> second.parse<T>() then.
+		}
+	protected:
+		std::string m_value;
+		ValueTypes m_type;
+	};
+
 	class JSON
 	{
 	public:
@@ -65,6 +99,28 @@ namespace onodrim
 			m_map[key] = convert.str();
 		}
 
+		friend std::ostream& operator<<(std::ostream& os, const JSON& object)
+		{
+			os << '{';
+			for (auto it = object.m_map.begin(); it != object.m_map.end(); it++)
+			{
+				os << '\"' << it->first << '\"' << ":" << it->second;
+				if (std::next(it,1) != object.m_map.end())
+				{
+					os << ',';
+				}
+			}
+			os << '}';
+			return os;
+		}
+
+		friend std::istream& operator>>(std::istream& is, JSON& object)
+		{
+			std::string s(std::istreambuf_iterator<char>(is), {});
+			object.ParseRawString(s);
+			return is;
+		}
+
 	protected:
 		std::unordered_map<std::string, std::string> m_map;
 
@@ -107,7 +163,15 @@ namespace onodrim
 					int end = FindIndexOfClosingCharacter(str, i, '[', ']');
 					std::string keyvalue = str.substr(start, end - start + 1);
 					std::size_t found = keyvalue.find(':');
-					m_map[keyvalue.substr(0, found)] = keyvalue.substr(found + 1, keyvalue.length() - found - 1);
+					if (keyvalue[found + 1] == '\"')
+					{
+						int end = keyvalue.length() - (found + 2) - 1;
+						m_map[keyvalue.substr(1, found-2)] = keyvalue.substr(found + 2, end);
+					}
+					else
+					{
+						m_map[keyvalue.substr(1, found-2)] = keyvalue.substr(found + 1, keyvalue.length() - found - 1);
+					}					
 					i = end + 1;
 					start = i + 1;
 				}
@@ -117,7 +181,7 @@ namespace onodrim
 					int end = FindIndexOfClosingCharacter(str, i, '{', '}');
 					std::string keyvalue = str.substr(start, end - start + 1);
 					std::size_t found = keyvalue.find(':');
-					m_map[keyvalue.substr(0, found)] = keyvalue.substr(found + 1, keyvalue.length() - found - 1);
+					m_map[keyvalue.substr(1, found-2)] = keyvalue.substr(found + 1, keyvalue.length() - found - 1);
 					i = end + 1;
 					start = i + 1;
 				}
@@ -125,7 +189,16 @@ namespace onodrim
 				{
 					std::string keyvalue = str.substr(start, i - start);
 					std::size_t found = keyvalue.find(':');
-					m_map[keyvalue.substr(0, found)] = keyvalue.substr(found + 1, keyvalue.length() - found - 1);
+					if (keyvalue[found + 1] == '\"')
+					{
+						int end = keyvalue.length() - (found+2) - 1;
+						m_map[keyvalue.substr(1, found-2)] = keyvalue.substr(found + 2, end);
+					}
+					else
+					{
+						m_map[keyvalue.substr(1, found-2)] = keyvalue.substr(found + 1, keyvalue.length() - found - 1);
+					}
+					
 					start = i + 1;
 				}
 			}
@@ -133,7 +206,7 @@ namespace onodrim
 			{
 				std::string keyvalue = str.substr(start, length - start);
 				std::size_t found = keyvalue.find(':');
-				m_map[keyvalue.substr(0, found)] = keyvalue.substr(found + 1, keyvalue.length() - found - 1);
+				m_map[keyvalue.substr(1, found-2)] = keyvalue.substr(found + 1, keyvalue.length() - found - 1);
 			}
 		}
 
@@ -150,16 +223,22 @@ namespace onodrim
 		{
 			return a == ',';
 		}
+		inline bool IsString(const char a)
+		{
+			return a == '\"';
+		}
 
 		std::string TrimString(std::string input)
 		{
-			static const std::array<char, 6> toReplace = {
+			// probably do not want to remove the " and ' here, since without them it's hard to identify strings and keys
+			// it causes problem when parsing objects sometimes.
+			static const std::array<char, 4> toReplace = {
 				'\t',
 				' ',
 				'\n',
-				'\r',
-				'\"',
-				'\''
+				'\r'
+				//'\"',
+				//'\''
 			};
 			size_t num = 0;
 			for (size_t i = 0; i < input.length(); ++i)
@@ -176,9 +255,9 @@ namespace onodrim
 						num = 0;
 					}
 					size_t end = FindIndexOfClosingCharacter(input, i, '\"', '\"');
-					input.erase(i, 1);
-					input.erase(end-1, 1);
-					i = end-2;
+					//input.erase(i, 1);
+					//input.erase(end-1, 1);
+					i = end;
 				}
 				
 				// increase buffer for removal if matches any of the to-remove signs
@@ -221,13 +300,6 @@ namespace onodrim
 		}
 	};
 
-	std::istream& operator>>(std::istream& is, JSON& object)
-	{
-		std::string s(std::istreambuf_iterator<char>(is), {});
-		object.ParseRawString(s);
-		return is;
-	}
-
 	template <typename T>
 	std::istream& operator>>(std::istream& is, std::vector<T>& vector)
 	{
@@ -236,28 +308,45 @@ namespace onodrim
 		const char separator = ',';
 		size_t start = 1;
 		size_t length = s.length() - 2;
+		size_t begin;
+		size_t len;
 		for (size_t i = 1; i < length; ++i)
 		{
 			if (s[i] == separator)
 			{
-				std::stringstream convert(s.substr(start, i - start));
+				
+				if (s[start] == '\"')
+				{
+					begin = start + 1;
+					len = i - start - 2;
+				}
+				else
+				{
+					begin = start;
+					len = i - start;
+				}
+				std::stringstream convert(s.substr(begin, len));
 				T castedValue;
 				convert >> castedValue;
 				vector.push_back(castedValue);
 				start = i + 1;
 			}
 		}
-		std::stringstream convert(s.substr(start, (s.length() - 1) - start));
+		if (s[start] == '\"')
+		{
+			begin = start + 1;
+			len = (s.length() - 1) - start - 2;
+		}
+		else
+		{
+			begin = start;
+			len = (s.length() - 1) - start;
+		}
+		std::stringstream convert(s.substr(begin, len));
 		T castedValue;
 		convert >> castedValue;
 		vector.push_back(castedValue);
 		return is;
-	}
-
-	std::ostream& operator<<(std::ostream& os, const JSON& object)
-	{
-		throw "NOT IMPLEMENTED";
-		return os;
 	}
 
 	template <typename T>

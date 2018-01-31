@@ -4,29 +4,29 @@
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 static std::string data = R"(
 {
-	str: "hello",
-	num: 42,
-	arr: [
+	"str": "hello",
+	"num": 42,
+	"arr": [
 		0,
 		2,
 		4,
 		8
 	],
 	"some key with space": 1,
-	strArr: [
+	"strArr": [
 		"hej",
 		"dig",
 		"du"
 	],	
-	obj: {
-		num: 41,
-		arrayOfObjects: [
-			{someNumber: 0},
-			{someNumber: 2},
-			{someNumber: 4}
+	"obj": {
+		"num": 41,
+		"arrayOfObjects": [
+			{"someNumber": 0},
+			{"someNumber": 2},
+			{"someNumber": 4}
 		]
 	},
-	digit: 3.14
+	"digit": 3.14
 })";
 onodrim::JSON obj = onodrim::JSON(data);
 namespace onodrim_unit_tests
@@ -128,11 +128,21 @@ namespace onodrim_unit_tests
 		TEST_METHOD(JSON_Set_json)
 		{
 			onodrim::JSON obj;
-			onodrim::JSON expected = onodrim::JSON((std::string)"{key: 123}");
+			onodrim::JSON expected = onodrim::JSON((std::string)"{\"key\": 123}");
 			obj.Set("someObject", expected);
 			auto actual = obj.Get<onodrim::JSON>("someObject");
 			Assert::IsTrue(actual.HasValues());
 			Assert::AreEqual(expected.Get<int>("key"), actual.Get<int>("key"));
+		}
+
+		TEST_METHOD(JSON_Set_json_spaces)
+		{
+			onodrim::JSON obj;
+			onodrim::JSON expected = onodrim::JSON((std::string)"{\"some key\": \"hello mr emil\"}");
+			obj.Set("someObject", expected);
+			auto actual = obj.Get<onodrim::JSON>("someObject");
+			Assert::IsTrue(actual.HasValues());
+			Assert::AreEqual(expected.Get<std::string>("some key"), actual.Get<std::string>("some key"));
 		}
 	};
 }
